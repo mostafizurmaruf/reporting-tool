@@ -33,7 +33,7 @@
       </div>
 
       <div class="nav-label">Preferences</div>
-      <button type="button" class="nav-item" id="navSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span><b>Settings</b><small>GitHub &amp; Gemini</small></span><span class="dot" id="navDot"></span></button>
+      <button type="button" class="nav-item" id="navSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span><b>Settings</b><small>GitHub &amp; Gemini</small></span><span class="live" id="navDot" aria-label="Settings status">NULL</span></button>
       <button type="button" class="nav-item" id="themeBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span><b>Theme</b><small id="themeLabel">System</small></span></button>
     </nav>
 
@@ -60,13 +60,6 @@
       </header>
 
   <div id="docView">
-    <div class="stats" aria-label="Document at a glance">
-      <div class="stat"><span class="stat-ic s-blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></span><div><b id="sqModules">0</b><small>Modules</small></div></div>
-      <div class="stat"><span class="stat-ic s-violet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><div><b id="sqSections">0</b><small>Sections</small></div></div>
-      <div class="stat"><span class="stat-ic s-green"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg></span><div><b id="sqPoints">0</b><small>Bullet points</small></div></div>
-      <div class="stat"><span class="stat-ic s-amber"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span><div><b id="sqVersion">–</b><small>Version</small></div></div>
-    </div>
-
     <section class="card">
       <h3>DOCUMENT DETAILS</h3>
       <div class="grid4">
@@ -80,7 +73,6 @@
         <button type="button" id="dExport">Save as JSON</button>
         <input type="file" id="dImportFile" accept=".json,application/json" hidden>
         <button type="button" class="danger" id="dNew">New document</button>
-        <button type="button" class="gear" id="dSettings" title="Gemini settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
       </div>
       <div class="hint">Your document is saved automatically in this browser. Use “Save as JSON” to back it up or hand it to a teammate, who can continue with “Open JSON”.</div>
     </section>
@@ -104,12 +96,6 @@
     </section>
   </div>
 
-  <div id="reportView">
-  <div class="stats" aria-label="Today at a glance">
-    <div class="stat"><span class="stat-ic s-blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 13 2 2 4-4"/></svg></span><div><b id="stTotal">0</b><small>Tasks today</small></div></div>
-    <div class="stat"><span class="stat-ic s-green"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><div><b id="stDone">0</b><small>Completed</small></div></div>
-    <div class="stat"><span class="stat-ic s-amber"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b id="stPending">0</b><small>Pending / in progress</small></div></div>
-    <div class="stat"><span class="stat-ic s-violet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span><div><b id="stAvg">0%</b><small>Average completion</small><span class="meter"><i id="stBar"></i></span></div></div>
   </div>
 
   <section class="card">
@@ -146,7 +132,6 @@
       <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
       <button type="button" class="primary" id="ghFetch">⬇ Fetch commits</button>
       <button type="button" class="primary" id="sqaFetch" title="SQA team: fill the report from today's work in the SQA Documentation tab">⬇ Fetch SQA work</button>
-      <button type="button" class="gear" id="setOpen" title="GitHub &amp; Gemini settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings<span class="dot"></span></button>
     </div>
     <div class="hint">CSV columns: Task Assigned / Undertaken, Work Source / Instructed By, Work Done / Measurable Output, Completion (%), Pending Tasks / Delay Reason / Remarks. An SL column is optional. Uploading replaces the rows above.</div>
     <div class="hint">⬇ Fetch commits gets every commit you authored on the Reporting Date; with a Gemini key, related commits are grouped and rewritten as plain-language tasks with “Work Done” filled in and the repo name as “Work Source” – review and edit before submitting. 📋 Copy commits still gives the raw commit list and links. Add your GitHub token and Gemini key once under ⚙ Settings.</div>
@@ -230,15 +215,13 @@
       <div><label for="ghUser">GitHub username</label><input id="ghUser" autocomplete="off" placeholder="optional – read from token"></div>
       <div><label for="ghToken">GitHub token (<a href="https://github.com/settings/tokens/new?scopes=repo&amp;description=Daily%20Task%20Report" target="_blank" rel="noopener">create one</a> – needs <b>repo</b> scope for private repos)</label><input id="ghToken" type="password" autocomplete="off" placeholder="ghp_… – kept only in this browser"></div>
       <div class="hint">All repos the token can see, commits from every branch; merge commits skipped, duplicates removed. Without a token only each repo’s default branch is searched.</div>
-      <div class="set-btns"><button type="button" id="ghClear">Forget</button><button type="button" class="primary" id="ghSave">Save</button></div>
     </div>
     <div class="set-sec">
       <h4><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1c.6 5.6 5.4 10.4 11 11-5.6.6-10.4 5.4-11 11-.6-5.6-5.4-10.4-11-11 5.6-.6 10.4-5.4 11-11z"/></svg>Google Gemini</h4>
       <div><label for="aiKey">Gemini API key (free: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>)</label><input id="aiKey" type="password" autocomplete="off" placeholder="Paste your key once – it is kept only in this browser"></div>
-      <div class="set-btns"><button type="button" id="aiClear">Forget key</button><button type="button" class="primary" id="aiSave">Save key</button></div>
     </div>
   </div>
-  <div class="set-foot"><span class="msg" id="setMsg">Saved only in this browser.</span><button type="button" id="setDone">Done</button></div>
+  <div class="set-foot"><span class="msg" id="setMsg">Saved only in this browser.</span><button type="button" class="primary" id="setSave">Save</button></div>
 </dialog>
 
 <div class="undo" id="undoBar" role="status" aria-live="polite"><span id="undoMsg"></span><button type="button" id="undoBtn">↶ Undo</button></div>

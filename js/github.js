@@ -5,8 +5,6 @@ const ghStore = {
   set(v) { try { v.token || v.user ? localStorage.setItem(GH_KEY, JSON.stringify(v)) : localStorage.removeItem(GH_KEY); } catch {} },
 };
 { const g = ghStore.get(); $('ghUser').value = g.user || ''; $('ghToken').value = g.token || ''; }
-$('ghSave').onclick = () => { ghStore.set({ user: $('ghUser').value.trim(), token: $('ghToken').value.trim() }); $('status').textContent = 'GitHub details saved in this browser.'; };
-$('ghClear').onclick = () => { $('ghUser').value = ''; $('ghToken').value = ''; ghStore.set({}); $('status').textContent = 'GitHub details removed.'; };
 
 async function gh(path, token) {
   let res;

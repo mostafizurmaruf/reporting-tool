@@ -1,6 +1,6 @@
 /* =====================================================================
    App shell: sidebar navigation, mobile menu, theme switch,
-   breadcrumb, sidebar user card and the dashboard stat tiles.
+   breadcrumb and sidebar user card.
    Loaded last – it only reads what the other scripts render.
    ===================================================================== */
 (() => {
@@ -24,11 +24,8 @@
   new MutationObserver(syncCrumb).observe(body, { attributes: true, attributeFilter: ['class'] });
   syncCrumb();
 
-  /* ---------- Settings (sidebar item + red dot when keys are missing) ---------- */
-  $('navSettings').onclick = () => { setNav(false); $('setOpen').click(); };
-  const syncDot = () => $('navDot').classList.toggle('on', $('setOpen').classList.contains('missing'));
-  new MutationObserver(syncDot).observe($('setOpen'), { attributes: true, attributeFilter: ['class'] });
-  syncDot();
+  /* ---------- Settings (sidebar item; LIVE / NULL badge is kept up to date by ui.js) ---------- */
+  $('navSettings').onclick = () => { setNav(false); openSettings(); };
 
   /* ---------- Theme: System → Light → Dark ---------- */
   const THEME_KEY = 'versatilo-theme', ORDER = ['', 'light', 'dark'], NAME = { '': 'System', light: 'Light', dark: 'Dark' };
@@ -52,38 +49,12 @@
     $('sideAvatar').textContent = name ? name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() : '?';
   };
 
-  /* ---------- Daily Report stat tiles ---------- */
-  const syncReport = () => {
-    const rows = [...$('tasks').children]
-      .map(tr => ({ task: tr.querySelector('[data-f=task]')?.value.trim(), pct: Number(tr.querySelector('[data-f=pct]')?.value) || 0 }))
-      .filter(r => r.task);
-    const done = rows.filter(r => r.pct >= 100).length;
-    const avg = rows.length ? Math.round(rows.reduce((s, r) => s + Math.min(100, Math.max(0, r.pct)), 0) / rows.length) : 0;
-    $('stTotal').textContent = rows.length;
-    $('stDone').textContent = done;
-    $('stPending').textContent = rows.length - done;
-    $('stAvg').textContent = avg + '%';
-    $('stBar').style.width = avg + '%';
-  };
-
-  /* ---------- SQA Tool stat tiles ---------- */
-  const syncSqa = () => {
-    const d = typeof SQA !== 'undefined' && SQA.doc;
-    if (!d) return;
-    const mods = d.modules || [], secs = mods.flatMap(m => m.sections || []);
-    const points = secs.reduce((n, s) => n + String(s.points || '').split('\n').filter(l => l.trim() && !/^\s*###\s/.test(l)).length, 0);
-    $('sqModules').textContent = mods.length;
-    $('sqSections').textContent = secs.length;
-    $('sqPoints').textContent = points;
-    $('sqVersion').textContent = d.version ? 'v' + String(d.version).replace(/^v/i, '') : '–';
-  };
-
   /* Refresh everything at most once per frame after any edit */
   let queued = false;
   const refresh = () => {
     if (queued) return;
     queued = true;
-    requestAnimationFrame(() => { queued = false; syncUser(); syncReport(); syncSqa(); });
+    requestAnimationFrame(() => { queued = false; syncUser(); });
   };
   ['input', 'change', 'click', 'report:summary'].forEach(ev => document.addEventListener(ev, refresh));
   new MutationObserver(refresh).observe($('tasks'), { childList: true });

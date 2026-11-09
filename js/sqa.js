@@ -447,7 +447,6 @@ Return a JSON array of modules.`;
     doc = blankDoc(); doc.author = $('empName').value.trim(); cur = 0; preview = false; ls.set(DKEY, JSON.stringify(doc)); fillDetails(); render();
     $('status').textContent = 'New document started.';
   };
-  $('dSettings').onclick = () => $('setOpen').click();
   window.addEventListener('beforeprint', () => { if (document.body.classList.contains('docmode') && !$('docPrint').innerHTML) $('docPrint').innerHTML = `<div class="docprev">${toHTML(docBlocks())}</div>`; });
   window.addEventListener('afterprint', () => { $('docPrint').innerHTML = ''; });
 

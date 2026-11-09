@@ -2,7 +2,7 @@
    Print: only the document, no app chrome
    ===================================================================== */
 @media print{
-  .sidebar,.scrim,.topbar,.stats,.toast,.toolbar,.row-btns,.row-btns + .hint,td.act,th.act,td.pick,th.pick,.undo{display:none !important}
+  .sidebar,.scrim,.topbar,.toast,.toolbar,.row-btns,.row-btns + .hint,td.act,th.act,td.pick,th.pick,.undo{display:none !important}
   body{background:#fff}
   .main{margin-left:0}
   .wrap{max-width:none;padding:0}

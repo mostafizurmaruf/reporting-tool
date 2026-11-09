@@ -36,7 +36,7 @@ $('ghFetch').onclick = async () => {
         catch (e) { if (aiNote === 'ai') aiNote = e.message; }
       }
     } else if (fresh.length) {
-      $('setOpen').click();   // no Gemini key → open Settings so it can be added
+      openSettings();   // no Gemini key → open Settings so it can be added
     }
     if (rows.length) {
       // Drop blank rows (default "Completed" remark counts as blank), then add the new rows

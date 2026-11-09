@@ -10,8 +10,6 @@ const aiStore = {
 };
 let aiKeyMem = aiStore.get();
 $('aiKey').value = aiKeyMem;
-$('aiSave').onclick = () => { aiKeyMem = $('aiKey').value.trim(); aiStore.set(aiKeyMem); $('status').textContent = aiKeyMem ? 'Gemini key saved in this browser.' : 'Key is empty.'; };
-$('aiClear').onclick = () => { aiKeyMem = ''; $('aiKey').value = ''; aiStore.set(''); $('status').textContent = 'Gemini key removed.'; };
 
 async function askGemini(tasks) {
   const key = $('aiKey').value.trim() || aiKeyMem;

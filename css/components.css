@@ -10,22 +10,6 @@
 .row-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .empty{color:var(--muted);text-align:center;padding:28px 10px}
 
-/* ----- Stat tiles ----- */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
-@media (max-width:980px){.stats{grid-template-columns:1fr 1fr}}
-.stat{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);min-width:0}
-.stat > div{min-width:0;flex:1}
-.stat b{display:block;font-size:22px;line-height:1.15;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.stat small{display:block;color:var(--muted);font-size:12px;font-weight:600}
-.stat-ic{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex:none}
-.stat-ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.s-blue{color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent)}
-.s-green{color:var(--ok);background:color-mix(in srgb,var(--ok) 13%,transparent)}
-.s-amber{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
-.s-violet{color:var(--violet);background:color-mix(in srgb,var(--violet) 13%,transparent)}
-.meter{display:block;height:5px;border-radius:99px;background:color-mix(in srgb,var(--line) 80%,transparent);margin-top:6px;overflow:hidden}
-.meter i{display:block;height:100%;width:0;background:var(--violet);border-radius:inherit;transition:width .3s}
-
 /* ----- Tables ----- */
 .tbl{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:10px}
 table{width:100%;border-collapse:collapse;min-width:860px}
@@ -42,12 +26,6 @@ td.pick{padding-top:14px}
 th.pick input,td.pick input{width:16px;height:16px;margin:0;cursor:pointer;accent-color:var(--accent)}
 tr.picked td{background:color-mix(in srgb,var(--accent) 10%,transparent)}
 
-/* ----- Settings gear button ----- */
-.gear{margin-left:auto;display:inline-flex;align-items:center;gap:6px}
-.gear svg{width:16px;height:16px;transition:transform .4s}
-.gear:hover svg{transform:rotate(60deg)}
-.gear .dot{width:8px;height:8px;border-radius:50%;background:var(--danger);display:none}
-.gear.missing .dot{display:inline-block}
 
 /* ----- Dialogs ----- */
 dialog.settings{border:1px solid var(--line);border-radius:14px;padding:0;background:var(--card);color:var(--ink);width:min(560px,calc(100vw - 32px));box-shadow:0 20px 60px rgba(0,0,0,.35)}
