@@ -23,29 +23,8 @@
 <script>Layout.topbar('home');</script>
 
     <div class="wrap">
-      <header class="home-hero">
-        <img src="favicon.svg" alt="">
-        <div>
-          <h1>Versatilo Tool</h1>
-          <p>Reports, documentation, document editing and app icons, all in one place. Pick a tool to get started.</p>
-        </div>
-      </header>
-
       <h2 class="home-sec">Workspace</h2>
 <script>Layout.cards();</script>
-
-      <h2 class="home-sec">Preferences</h2>
-      <div class="home-grid prefs">
-        <button type="button" class="home-card" id="homeSettings" style="--c:#0891b2">
-          <span class="hc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span>
-          <span class="hc-txt"><b>Settings</b><small>GitHub token &amp; Gemini key</small></span>
-          <span class="badge" id="homeDot">NULL</span>
-        </button>
-        <button type="button" class="home-card" id="homeTheme" style="--c:#475569">
-          <span class="hc-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
-          <span class="hc-txt"><b>Theme</b><small id="homeThemeLabel">System</small></span>
-        </button>
-      </div>
     </div>
   </div>
 </div>
@@ -57,21 +36,6 @@
 loadAssets([
   'js/common.js', 'js/gemini.js', 'js/github.js', 'js/ui.js', 'js/shell.js',
 ]);
-</script>
-<script>
-/* Preferences cards reuse the sidebar buttons, and mirror their labels */
-(() => {
-  const sync = () => {
-    const dot = document.getElementById('navDot');
-    homeDot.textContent = dot.textContent; homeDot.classList.toggle('on', dot.classList.contains('on'));
-    homeThemeLabel.textContent = document.getElementById('themeLabel').textContent;
-  };
-  homeSettings.onclick = () => document.getElementById('navSettings').click();
-  homeTheme.onclick = () => { document.getElementById('themeBtn').click(); sync(); };
-  new MutationObserver(sync).observe(document.getElementById('navDot'), { childList: true, attributes: true });
-  window.addEventListener('load', sync);
-  sync();
-})();
 </script>
 </body>
 </html>

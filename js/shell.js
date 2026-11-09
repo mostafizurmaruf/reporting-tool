@@ -36,7 +36,7 @@
   if (window.APP_VERSION) $('appVer').textContent = 'v' + APP_VERSION; else $('appVer').remove();
 
   /* ---------- Today chip ---------- */
-  $('todayChip').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+  if ($('todayChip')) $('todayChip').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
 
   /* ---------- Sidebar user card (Employee Name / Designation; saved values on other pages) ---------- */
   const syncUser = () => {

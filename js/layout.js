@@ -26,7 +26,6 @@ const Layout = (() => {
       tags: ['Android mipmaps', 'iOS AppIcon', 'Gradient', 'Offline'],
       svg: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/>' },
   ];
-  const HOME_SVG = '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/>';
 
   function sidebar(page) {
     const cur = p => p === page ? ' aria-current="page"' : '';
@@ -38,9 +37,6 @@ const Layout = (() => {
     </a>
 
     <nav class="side-nav">
-      <a class="nav-item" href="index.html" id="navHome"${cur('home')}>
-        <svg viewBox="0 0 24 24" aria-hidden="true">${HOME_SVG}</svg><span><b>Home</b><small>All tools</small></span>
-      </a>
       <div class="nav-label">Workspace</div>
 ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t.page)}>
         <svg viewBox="0 0 24 24" aria-hidden="true">${t.svg}</svg><span><b>${t.title}</b><small>${t.sub}</small></span>
@@ -65,7 +61,7 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
     <div class="topbar">
       <button type="button" class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <div class="crumbs"><span>Versatilo Group</span><i aria-hidden="true">/</i><b id="crumbPage">${PAGES[page]}</b></div>
-      <div class="top-right"><span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span id="todayChip"></span></span></div>
+      ${page === 'home' ? '' : '<div class="top-right"><span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span id="todayChip"></span></span></div>'}
     </div>
 `);
   }
