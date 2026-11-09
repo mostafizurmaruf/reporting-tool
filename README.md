@@ -45,14 +45,14 @@ js/                   (classic scripts – load order matters)
 
 ## Fetch Google Doc
 
-Each person pastes the link of their own work doc in ⚙ Settings → Google Docs. **⬇ Fetch Google Doc** signs in with Google
-(read-only `documents.readonly` scope, token kept in the tab for ~1 hour), reads the doc and takes the part for the Reporting Date:
+Each person pastes the links of their own work docs in ⚙ Settings → Google Docs (one per line). **⬇ Fetch Google Doc** signs in with Google
+(read-only `documents.readonly` scope, token kept in this browser for ~1 hour), reads every doc and takes the part for the Reporting Date:
 
 1. **Dated doc (best):** every line / heading with that date (`09/11/2026`, `2026-11-09`, `9 Nov 2026`, …) up to the next date.
 2. **No dates:** what was added or changed since the last fetch on an earlier day (a copy of the doc is kept in this browser).
 3. **First fetch of an undated doc:** the end of the doc – Gemini guesses the latest work.
 
-Gemini then writes the rows. Fetching again for the same day replaces those rows.
+Gemini then writes the rows in one go (Work Source = the doc's title). Fetching again for the same day replaces those rows.
 
 ### One-time Google Cloud setup (admin)
 
@@ -69,7 +69,7 @@ The OAuth Client ID is `GOOGLE_CLIENT_ID` at the top of `js/gdocs.js`.
 The version is set in **one place** – `js/version.js`:
 
 ```js
-window.APP_VERSION = '1.6.0';
+window.APP_VERSION = '1.6.1';
 ```
 
 Every page loads `js/version.js` with a fresh `?t=…` (so it is never cached), and every other CSS/JS file is loaded through `loadAssets()` with `?v=<APP_VERSION>`. The sidebar shows the same number next to the app name.

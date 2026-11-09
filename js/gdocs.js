@@ -11,7 +11,7 @@ const GDOC_SCOPE = 'https://www.googleapis.com/auth/documents.readonly';
 
 if (document.getElementById('gdFetch')) (() => {
   /* ---------- Google sign-in (Google Identity Services token client) ---------- */
-  const TOKEN_KEY = 'versatilo-gdoc-token';   // sessionStorage: valid ~1 hour, gone when the tab closes
+  const TOKEN_KEY = 'versatilo-gdoc-token';   // localStorage: read-only token, valid ~1 hour, so reloads don't ask again
   let gisReady = null, tokenClient = null, pending = null;
   const loadGis = () => gisReady ||= new Promise((res, rej) => {
     const s = document.createElement('script');
@@ -20,9 +20,9 @@ if (document.getElementById('gdFetch')) (() => {
     document.head.appendChild(s);
   });
   const savedToken = () => {
-    try { const t = JSON.parse(sessionStorage.getItem(TOKEN_KEY) || 'null'); return t && t.exp > Date.now() + 60000 ? t.value : ''; } catch { return ''; }
+    try { const t = JSON.parse(localStorage.getItem(TOKEN_KEY) || 'null'); return t && t.exp > Date.now() + 60000 ? t.value : ''; } catch { return ''; }
   };
-  const saveToken = (value, secs) => { try { value ? sessionStorage.setItem(TOKEN_KEY, JSON.stringify({ value, exp: Date.now() + secs * 1000 })) : sessionStorage.removeItem(TOKEN_KEY); } catch {} };
+  const saveToken = (value, secs) => { try { value ? localStorage.setItem(TOKEN_KEY, JSON.stringify({ value, exp: Date.now() + secs * 1000 })) : localStorage.removeItem(TOKEN_KEY); } catch {} };
   // Must be called straight from the click (before any await), or the browser blocks the Google popup
   function requestToken() {
     return new Promise((resolve, reject) => {
@@ -43,6 +43,8 @@ if (document.getElementById('gdFetch')) (() => {
 
   /* ---------- Read the document ---------- */
   const docId = v => (String(v).match(/\/document\/(?:u\/\d+\/)?d\/([\w-]{20,})/) || String(v).trim().match(/^([\w-]{20,})$/) || [])[1] || '';
+  // One link per line (commas / spaces work too); duplicates removed
+  const docIds = () => [...new Set(gdocStore.get().split(/[\s,]+/).map(docId).filter(Boolean))];
   async function readDoc(id, token) {
     let res;
     try { res = await fetch(`https://docs.googleapis.com/v1/documents/${id}?includeTabsContent=true`, { headers: { Authorization: 'Bearer ' + token } }); }
@@ -130,14 +132,17 @@ if (document.getElementById('gdFetch')) (() => {
     return { base, text: asText(out) };
   }
 
-  /* ---------- Gemini: text → report rows ---------- */
-  async function aiRows(title, day, text, mode) {
-    const how = mode === 'dated' ? 'the part of the document dated that day'
-      : mode === 'changes' ? 'only the text added or changed since the previous fetch'
-      : 'the end of the whole document (it has no dates, so it may also contain older work – report only what looks like the latest work)';
+  /* ---------- Gemini: text of every doc → report rows ---------- */
+  const HOW = {
+    dated: 'the part dated that day',
+    changes: 'only the text added or changed since the previous fetch',
+    whole: 'the end of the document (it has no dates, so it may also contain older work – report only what looks like the latest work)',
+  };
+  async function aiRows(day, docs) {
     const prompt = `You prepare an SQA (software quality assurance) engineer's daily work report for ${fmtDay(day)}. It is read by HR and management, who are NOT technical.
-Below is ${how}, from the engineer's work document "${title}" (headings are marked with #).
-Group the work into 1–8 report tasks. For each task write:
+Below is text from the engineer's work documents, numbered from 0 (headings are marked with #).
+Group the work into report tasks (usually 1–8 per document; never mix two documents in one task). For each task write:
+- "doc": the number of the document the task comes from.
 - "task": a short title in plain business English (max ~12 words), e.g. "Tested the Leave Management module" or "Documented the Attendance screens".
 - "done": 1–2 professional sentences in past tense on what was done and the concrete output (screens / features covered, how many test cases or bugs if the text says so).
 - "pct": completion 0–100. Use 100 unless the text says the work is unfinished, in progress or pending.
@@ -145,58 +150,79 @@ Group the work into 1–8 report tasks. For each task write:
 Rules: stay faithful to the text – do not invent features, numbers, people or results. No markdown, no quotes, no bullet points. English only.
 Return a JSON array of objects.
 
-Text:
-${text}`;
-    const schema = { type: 'ARRAY', items: { type: 'OBJECT', required: ['task', 'done', 'pct', 'remarks'], properties: {
-      task: { type: 'STRING' }, done: { type: 'STRING' }, pct: { type: 'INTEGER' }, remarks: { type: 'STRING' } } } };
+${docs.map((d, i) => `=== Document ${i}: "${d.title}" – ${HOW[d.mode]} ===\n${d.text}`).join('\n\n')}`;
+    const schema = { type: 'ARRAY', items: { type: 'OBJECT', required: ['doc', 'task', 'done', 'pct', 'remarks'], properties: {
+      doc: { type: 'INTEGER' }, task: { type: 'STRING' }, done: { type: 'STRING' }, pct: { type: 'INTEGER' }, remarks: { type: 'STRING' } } } };
     const out = await callGemini(prompt, schema);
-    const rows = out.map(o => ({ task: String(o?.task ?? '').trim(), done: String(o?.done ?? '').trim(),
+    const rows = out.map(o => ({ doc: docs[Number.isInteger(o?.doc) && docs[o.doc] ? o.doc : 0], task: String(o?.task ?? '').trim(), done: String(o?.done ?? '').trim(),
       pct: String(Math.max(0, Math.min(100, Number.isFinite(+o?.pct) ? Math.round(+o.pct) : 100))), remarks: String(o?.remarks ?? '').trim() || 'Completed' })).filter(r => r.task);
     if (!rows.length) throw new Error('Gemini returned an unexpected answer. Try again.');
     return rows;
   }
 
-  /* ---------- The button ---------- */
-  async function run(btn, tokenP) {
-    const day = $('repDate').value || today(), id = docId(gdocStore.get());
-    $('status').textContent = 'Signing in with Google…';
-    let token = await tokenP, d;
-    $('status').textContent = 'Reading your Google Doc…';
-    try { d = await readDoc(id, token); }
-    catch (e) { if (!e.expired) throw e; throw new Error('Google sign-in expired – click ⬇ Fetch Google Doc again.'); }
+  /* ---------- One doc → the Reporting Date's text (or a reason it has none) ---------- */
+  async function docPart(id, day, token) {
+    const d = await readDoc(id, token);
     const title = (d.title || 'Google Doc').trim(), lines = docLines(d);
-    if (!lines.length) { $('status').textContent = `“${title}” is empty.`; return; }
-
-    let text = '', mode = '', note = '';
+    if (!lines.length) return { id, title, skip: 'empty' };
     const dated = datedPart(lines, day);
-    if (dated.text) { text = dated.text; mode = 'dated'; }
-    else if (dated.markers >= 2) { saveSnap(id, day, lines); $('status').textContent = `No entry dated ${fmtDay(day)} found in “${title}”. Write the day’s work under a date heading like ${fmtDay(day)}.`; return; }
+    let res;
+    if (dated.text) res = { id, title, mode: 'dated', text: dated.text };
+    else if (dated.markers >= 2) res = { id, title, skip: `no entry dated ${fmtDay(day)}` };
     else {
       const ch = changedPart(id, day, lines);
-      if (ch && !ch.text.trim()) { saveSnap(id, day, lines); $('status').textContent = `Nothing new in “${title}” since ${fmtDay(ch.base)}.`; return; }
-      if (ch) { text = ch.text; mode = 'changes'; note = ` (changes since ${fmtDay(ch.base)})`; }
-      else { text = asText(lines).slice(-12000); mode = 'whole'; note = ' – the doc has no dates, so Gemini guessed the latest work; tip: add a date heading for each day'; }
+      res = ch && !ch.text.trim() ? { id, title, skip: `nothing new since ${fmtDay(ch.base)}` }
+        : ch ? { id, title, mode: 'changes', text: ch.text }
+        : { id, title, mode: 'whole', text: asText(lines).slice(-12000) };
     }
     saveSnap(id, day, lines);
-    text = text.slice(0, 20000);
-
-    $('status').textContent = `Gemini is writing report rows from “${title}”…`;
-    const rows = await aiRows(title, day, text, mode);
-    // Replace rows fetched earlier for the same doc + day, drop blank rows, then add the new ones
-    const key = `gdoc:${id}:${day}`, val = (tr, f) => tr.querySelector(`[data-f=${f}]`).value.trim();
-    [...tbody.children].filter(tr => tr._commits.includes(key) || (!val(tr, 'task') && !val(tr, 'source') && !val(tr, 'done') && /^(completed)?$/i.test(val(tr, 'remarks')))).forEach(tr => tr.remove());
-    rows.forEach(r => addRow({ ...r, source: 'SQA – ' + title, commits: [key] }));
-    if (!tbody.children.length) addRow();
-    onChange();
-    $('status').textContent = `Added ${rows.length} task${rows.length === 1 ? '' : 's'} from “${title}” for ${fmtDay(day)}${note}. Please review before submitting.`;
+    if (res.text) res.text = res.text.slice(0, 20000);
+    return res;
   }
 
+  /* ---------- The button ---------- */
+  async function run(ids, tokenP) {
+    const day = $('repDate').value || today();
+    $('status').textContent = 'Signing in with Google…';
+    const token = await tokenP;
+    $('status').textContent = `Reading ${ids.length} Google Doc${ids.length === 1 ? '' : 's'}…`;
+    const got = await Promise.all(ids.map(id => docPart(id, day, token).catch(e => {
+      if (e.expired) throw new Error('Google sign-in expired – click ⬇ Fetch Google Doc again.');
+      return { id, title: 'Doc …' + id.slice(-6), skip: e.message };
+    })));
+    const docs = got.filter(d => d.text), skipped = got.filter(d => d.skip).map(d => `“${d.title}”: ${d.skip}`);
+    if (!docs.length) {
+      $('status').textContent = `Nothing to add for ${fmtDay(day)} – ${skipped.join('; ')}.` + (got.some(d => /no entry dated/.test(d.skip)) ? ` Write the day’s work under a date heading like ${fmtDay(day)}.` : '');
+      return;
+    }
+    $('status').textContent = `Gemini is writing report rows from ${docs.length} doc${docs.length === 1 ? '' : 's'}…`;
+    const rows = await aiRows(day, docs);
+    // Replace rows fetched earlier for the same docs + day, drop blank rows, then add the new ones
+    const keys = new Set(docs.map(d => `gdoc:${d.id}:${day}`)), val = (tr, f) => tr.querySelector(`[data-f=${f}]`).value.trim();
+    [...tbody.children].filter(tr => tr._commits.some(k => keys.has(k)) || (!val(tr, 'task') && !val(tr, 'source') && !val(tr, 'done') && /^(completed)?$/i.test(val(tr, 'remarks')))).forEach(tr => tr.remove());
+    rows.forEach(({ doc, ...r }) => addRow({ ...r, source: 'SQA – ' + doc.title, commits: [`gdoc:${doc.id}:${day}`] }));
+    if (!tbody.children.length) addRow();
+    onChange();
+    const guessed = docs.filter(d => d.mode === 'whole').map(d => `“${d.title}”`);
+    $('status').textContent = `Added ${rows.length} task${rows.length === 1 ? '' : 's'} from ${docs.map(d => `“${d.title}”`).join(', ')} for ${fmtDay(day)}. Please review before submitting.`
+      + (guessed.length ? ` ${guessed.join(', ')} has no dates, so Gemini guessed the latest work – add a date heading for each day.` : '')
+      + (skipped.length ? ` Skipped – ${skipped.join('; ')}.` : '');
+  }
+
+  // Settings opened from this button → Save continues the fetch (the Save click also allows the Google popup)
+  let resume = false;
+  $('settings').addEventListener('close', () => setTimeout(() => { resume = false; }));
+  $('setSave').addEventListener('click', () => { if (resume) { resume = false; setTimeout(() => $('gdFetch').click()); } });
+  const askSettings = (msg, field) => { openSettings(); $('setMsg').textContent = msg; $(field).focus(); resume = true; };
+
   $('gdFetch').onclick = () => {
-    const btn = $('gdFetch');
-    if (!docId(gdocStore.get())) { openSettings(); $('setMsg').textContent = 'Paste your Google Doc link under Google Docs, then Save.'; $('gdocUrl').focus(); return; }
-    if (!($('aiKey').value.trim() || aiKeyMem)) { openSettings(); $('setMsg').textContent = 'Add your Gemini API key – it writes the report rows from the doc.'; $('aiKey').focus(); return; }
+    const btn = $('gdFetch'), ids = docIds();
+    if (btn.disabled) return;
+    if (!ids.length) return askSettings(gdocStore.get() ? 'That is not a Google Docs link – paste links like https://docs.google.com/document/d/…, then Save.' : 'Paste your Google Doc link(s) under Google Docs – one per line – then Save.', 'gdocUrl');
+    if (!($('aiKey').value.trim() || aiKeyMem)) return askSettings('Add your Gemini API key – it writes the report rows from the doc – then Save.', 'aiKey');
+    if (!gisReady) loadGis().catch(() => {});
     const tok = savedToken(), tokenP = tok ? Promise.resolve(tok) : requestToken();   // popup opens inside the click
     setBusy(btn, true);
-    run(btn, tokenP).catch(e => { $('status').textContent = e.message; }).finally(() => setBusy(btn, false));
+    run(ids, tokenP).catch(e => { $('status').textContent = e.message; }).finally(() => setBusy(btn, false));
   };
 })();
