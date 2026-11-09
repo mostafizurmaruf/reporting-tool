@@ -49,7 +49,7 @@ js/                   (classic scripts – load order matters)
 The version is set in **one place** – `js/version.js`:
 
 ```js
-window.APP_VERSION = '1.4.0';
+window.APP_VERSION = '1.5.0';
 ```
 
 Every page loads `js/version.js` with a fresh `?t=…` (so it is never cached), and every other CSS/JS file is loaded through `loadAssets()` with `?v=<APP_VERSION>`. The sidebar shows the same number next to the app name.

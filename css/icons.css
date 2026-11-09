@@ -33,7 +33,7 @@
 /* Preview */
 .ic-master{display:grid;place-items:center;padding:20px;border-radius:10px;border:1px solid var(--line);background:repeating-conic-gradient(color-mix(in srgb,var(--line) 70%,transparent) 0 25%,transparent 0 50%) 0 0/20px 20px}
 .ic-master canvas{width:min(240px,100%);height:auto;aspect-ratio:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.18))}
-.ic-home{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 6px;margin-top:16px;padding:20px 12px;border-radius:12px;background:linear-gradient(150deg,#1e3a5f,#4b2a6b 55%,#a2456b)}
+.ic-home{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 6px;margin-top:16px;padding:20px 12px;border-radius:12px;background: repeating-conic-gradient( color-mix(in srgb, var(--line) 70%, transparent) 0 25%, transparent 0 50%) 0 0 / 20px 20px;}
 .ic-home figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:6px}
 .ic-home canvas{width:60px;height:60px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
 .ic-home figcaption{font-size:11px;line-height:1.25;color:#fff;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.5)}
