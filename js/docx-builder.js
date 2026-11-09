@@ -59,7 +59,9 @@ const DOCX = (() => {
   function fmtTime(t) { if (!t) return ''; let [h, m] = t.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2, '0')} ${ap}`; }
 
   // Supervisor signature image (591×179 px) shown 1.8" wide
-  const SIGN_BYTES = Uint8Array.from(atob(SIGN_B64), c => c.charCodeAt(0));
+  // (decoded on first use – only the Daily Report page loads signature.js)
+  let signBytes;
+  const SIGN_BYTES = () => signBytes ||= Uint8Array.from(atob(SIGN_B64), c => c.charCodeAt(0));
   function sigImage() {
     const cx = 1645920, cy = Math.round(cx * 179 / 591);
     return `<w:p><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="1" name="Supervisor signature"/><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="1" name="sign.jpeg"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rIdSign"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>`;
@@ -106,7 +108,7 @@ const DOCX = (() => {
     const docRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdSign" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/sign.jpeg"/></Relationships>`;
     return zip([{ name: '[Content_Types].xml', data: ct }, { name: '_rels/.rels', data: rels }, { name: 'word/document.xml', data: doc },
-                { name: 'word/_rels/document.xml.rels', data: docRels }, { name: 'word/media/sign.jpeg', data: SIGN_BYTES }]);
+                { name: 'word/_rels/document.xml.rels', data: docRels }, { name: 'word/media/sign.jpeg', data: SIGN_BYTES() }]);
   }
   return { build, fmtDate, fmtTime, zip, esc };
 })();

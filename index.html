@@ -5,56 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Daily Task Report</title>
 <script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
-<script>
-/* ===== App version – the ONLY place to change it =====
-   Bump this after editing any CSS/JS: every file below is loaded with ?v=<version>,
-   so browsers fetch the new files without Ctrl+F5. The sidebar shows the same number. */
-window.APP_VERSION = '1.1.0';
-window.loadAssets = files => files.forEach(f => document.write(f.endsWith('.css')
-  ? `<link rel="stylesheet" href="${f}?v=${APP_VERSION}">`
-  : `<script src="${f}?v=${APP_VERSION}"><\/script>`));
-loadAssets(['css/base.css', 'css/layout.css', 'css/components.css', 'css/report.css', 'css/sqa.css', 'css/print.css']);
-</script>
+<script>/* old bookmarks of the SQA tool (index.html#docs) */if(location.hash==='#docs')location.replace('sqa.html');</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/report.css', 'css/print.css',
+  'js/layout.js',
+]);</script>
 </head>
 <body>
 <div class="app">
-  <!-- ===== Sidebar ===== -->
-  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
-    <div class="brand">
-      <span class="logo" aria-hidden="true">V</span>
-      <div><b>Versatilo <span class="ver" id="appVer"></span></b><small>Reporting Suite</small></div>
-    </div>
-
-    <nav class="side-nav">
-      <div class="nav-label">Workspace</div>
-      <div role="tablist" aria-label="Choose tool" aria-orientation="vertical">
-        <button type="button" class="nav-item" role="tab" id="modeReport" aria-selected="true">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 13 2 2 4-4"/></svg><span><b>Daily Report</b><small>Task &amp; performance</small></span>
-        </button>
-        <button type="button" class="nav-item" role="tab" id="modeDocs" aria-selected="false">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>SQA Tool</b><small>Feature documentation</small></span>
-        </button>
-      </div>
-
-      <div class="nav-label">Preferences</div>
-      <button type="button" class="nav-item" id="navSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span><b>Settings</b><small>GitHub &amp; Gemini</small></span><span class="live" id="navDot" aria-label="Settings status">NULL</span></button>
-      <button type="button" class="nav-item" id="themeBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span><b>Theme</b><small id="themeLabel">System</small></span></button>
-    </nav>
-
-    <div class="side-foot">
-      <span class="avatar" id="sideAvatar" aria-hidden="true">?</span>
-      <div><b id="sideName">Your name</b><small id="sideRole">Software Developer</small></div>
-    </div>
-  </aside>
-  <div class="scrim" id="scrim" hidden></div>
+<script>Layout.sidebar('report');</script>
 
   <!-- ===== Main area ===== -->
   <div class="main">
-    <div class="topbar">
-      <button type="button" class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-      <div class="crumbs"><span>Versatilo Group</span><i aria-hidden="true">/</i><b id="crumbPage">Daily Report</b></div>
-      <div class="top-right"><span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span id="todayChip"></span></span></div>
-    </div>
+<script>Layout.topbar('report');</script>
 
     <div class="wrap">
       <header class="doc">
@@ -62,45 +27,6 @@ loadAssets(['css/base.css', 'css/layout.css', 'css/components.css', 'css/report.
         <h2>DAILY TASK ASSIGNMENT &amp; PERFORMANCE REPORT</h2>
         <p id="docSub">Reporting Period: 03–27 November 2026 | To be completed before leaving the workplace each working day</p>
       </header>
-
-  <div id="docView">
-    <section class="card">
-      <h3>DOCUMENT DETAILS</h3>
-      <div class="grid4">
-        <div><label for="dProject">Project / Application</label><input id="dProject" data-d="project" placeholder="e.g. cGES Mobile Application"></div>
-        <div><label for="dVersion">Version</label><input id="dVersion" data-d="version" placeholder="1.0"></div>
-        <div><label for="dAuthor">Prepared by (SQA)</label><input id="dAuthor" data-d="author"></div>
-        <div><label for="dDate">Date</label><input id="dDate" type="date" data-d="date"></div>
-      </div>
-      <div class="row-btns">
-        <button type="button" id="dImport">Open JSON</button>
-        <button type="button" id="dExport">Save as JSON</button>
-        <input type="file" id="dImportFile" accept=".json,application/json" hidden>
-        <button type="button" class="danger" id="dNew">New document</button>
-      </div>
-      <div class="hint">Your document is saved automatically in this browser. Use “Save as JSON” to back it up or hand it to a teammate, who can continue with “Open JSON”.</div>
-    </section>
-
-    <section class="card">
-      <div class="mtabs" id="mTabs" role="tablist" aria-label="Modules"></div>
-      <div id="mEditor"></div>
-    </section>
-
-    <section class="card">
-      <h3>HOW TO WRITE A MODULE</h3>
-      <ol>
-        <li><b>One module per screen or feature area</b> (Home Page, Attendance, Notification, Leave Management…). Each module becomes one chapter, like one tab in the Google Doc.</li>
-        <li><b>Overview:</b> 1–3 sentences on what the module is for and how the user gets there.</li>
-        <li><b>Sections</b> follow the screen from top to bottom: one section per card, banner, tab, form or list.</li>
-        <li><b>Points:</b> one point per line. Indent with <kbd>Tab</kbd> (or two spaces) for a sub-point, <kbd>Shift</kbd>+<kbd>Tab</kbd> to go back. Write <code>Label: description</code> and the label is shown in bold. Start a line with <code>### </code> for a small sub-heading inside the section.</li>
-        <li><b>Interaction:</b> what happens on tap or click – where it navigates, which modal opens, what gets filtered.</li>
-        <li><b>Table</b> (optional) for color codes, status legends or field lists: one row per line, cells separated by <code>|</code>, first line is the header.</li>
-        <li>Note permissions and rules too, e.g. “Only admins / HR can approve”. Fast start: ✨ <b>Draft with Gemini</b> turns rough notes or screenshots into a full module – review it before sharing.</li>
-      </ol>
-    </section>
-  </div>
-
-  <div id="reportView">
 
   <section class="card">
     <h3>EMPLOYEE DETAILS</h3>
@@ -135,11 +61,11 @@ loadAssets(['css/base.css', 'css/layout.css', 'css/components.css', 'css/report.
       <button type="button" id="csvTpl">Download CSV template</button>
       <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
       <button type="button" class="primary" id="ghFetch">⬇ Fetch commits</button>
-      <button type="button" class="primary" id="sqaFetch" title="SQA team: fill the report from today's work in the SQA Documentation tab">⬇ Fetch SQA work</button>
+      <button type="button" class="primary" id="sqaFetch" title="SQA team: fill the report from today's work on the SQA Tool page">⬇ Fetch SQA work</button>
     </div>
     <div class="hint">CSV columns: Task Assigned / Undertaken, Work Source / Instructed By, Work Done / Measurable Output, Completion (%), Pending Tasks / Delay Reason / Remarks. An SL column is optional. Uploading replaces the rows above.</div>
     <div class="hint">⬇ Fetch commits gets every commit you authored on the Reporting Date; with a Gemini key, related commits are grouped and rewritten as plain-language tasks with “Work Done” filled in and the repo name as “Work Source” – review and edit before submitting. 📋 Copy commits still gives the raw commit list and links. Add your GitHub token and Gemini key once under ⚙ Settings.</div>
-    <div class="hint"><b>SQA team:</b> ⬇ Fetch SQA work fills the rows from what you wrote in the SQA Documentation tab on the Reporting Date (modules, new and updated sections, exports). Completion % and pending sections are worked out from the document itself; with a Gemini key the rows are written in plain language.</div>
+    <div class="hint"><b>SQA team:</b> ⬇ Fetch SQA work fills the rows from what you wrote on the SQA Tool page on the Reporting Date (modules, new and updated sections, exports). Completion % and pending sections are worked out from the document itself; with a Gemini key the rows are written in plain language.</div>
     <div class="note">Add rows as required. Report each task separately. Record actual progress at the time of departure.</div>
   </section>
 
@@ -175,67 +101,28 @@ loadAssets(['css/base.css', 'css/layout.css', 'css/components.css', 'css/report.
       <li>Employees must submit the report before leaving the workplace. Reporting authorities must verify, compile, and forward their teams’ daily reports to HR for centralized Management reporting throughout 03–27 November 2026. Management has communicated a minimum 60% performance target. Task completion percentages are not automatically an overall employee performance rating; assessments should consider task scope, evidence, and supervisory review.</li>
     </ol>
   </section>
-  </div><!-- /reportView -->
     </div>
 
-<div class="toolbar">
-  <span class="status" id="status" role="status" aria-live="polite">Employee details are saved automatically in this browser.</span>
-  <button type="button" class="r-only" id="ghCopy" title="Copy today's GitHub projects, commit names and links">📋 Copy commits</button>
-  <button type="button" class="r-only" id="printBtn">Print</button>
-  <button type="button" class="r-only" id="pdfBtn">Download PDF</button>
-  <button type="button" class="primary r-only" id="docxBtn">Download DOCX</button>
-  <button type="button" class="d-only" id="dPrint" title="Print, or choose “Save as PDF” in the print dialog">Print / PDF</button>
-  <button type="button" class="d-only" id="dCopyMod" title="Copy the open module with headings, bullets and tables – paste into a Google Docs tab">📋 Copy module</button>
-  <button type="button" class="d-only" id="dCopyAll" title="Copy the whole document – paste into Google Docs">📋 Copy all</button>
-  <button type="button" class="primary d-only" id="dDocx">Download DOCX</button>
-</div>
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite">Employee details are saved automatically in this browser.</span>
+      <button type="button" id="ghCopy" title="Copy today's GitHub projects, commit names and links">📋 Copy commits</button>
+      <button type="button" id="printBtn">Print</button>
+      <button type="button" id="pdfBtn">Download PDF</button>
+      <button type="button" class="primary" id="docxBtn">Download DOCX</button>
+    </div>
   </div>
 </div>
-<div id="docPrint"></div>
-
-<dialog class="settings" id="aiDoc" aria-labelledby="aiDocTitle">
-  <div class="set-head"><h3 id="aiDocTitle">✨ Draft with Gemini</h3><button type="button" id="aiDocClose" aria-label="Close">×</button></div>
-  <div class="set-body">
-    <div class="set-sec">
-      <div><label for="aiNotes">Rough notes (any style, any order – Gemini writes them up in English)</label>
-        <textarea id="aiNotes" rows="8" placeholder="e.g. Home page after login: date + live clock at top, shift status. Two cards: In Office / Outside Office. In Office shows HR notice carousel (tap → Announcements), leave balance banner (tap → Leave Management), verified office network, check-in card (tap opens detail modal)…"></textarea></div>
-      <div><label for="aiShots">Screenshots (optional, up to 8)</label><input id="aiShots" type="file" accept="image/*" multiple>
-        <div class="thumbs" id="aiThumbs"></div></div>
-      <div class="radios" role="radiogroup" aria-label="Where to put the result">
-        <label><input type="radio" name="aiMode" value="new" checked> Add as new module(s)</label>
-        <label><input type="radio" name="aiMode" value="rewrite"> Rewrite the current module (keeps what is already written and adds the notes)</label>
-      </div>
-      <div class="hint">Gemini only uses what is in your notes and screenshots. Always check the result against the app before sharing.</div>
-    </div>
-  </div>
-  <div class="set-foot"><span class="msg" id="aiDocMsg">Uses the Gemini key from ⚙ Settings.</span><button type="button" id="aiDocCancel">Cancel</button><button type="button" class="primary" id="aiDocGo">Generate</button></div>
-</dialog>
-
-<dialog class="settings" id="settings" aria-labelledby="setTitle">
-  <div class="set-head"><h3 id="setTitle">Settings</h3><button type="button" id="setClose" aria-label="Close">×</button></div>
-  <div class="set-body">
-    <div class="set-sec">
-      <h4><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C17.6 4.7 18.6 5 18.6 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</h4>
-      <div><label for="ghUser">GitHub username</label><input id="ghUser" autocomplete="off" placeholder="optional – read from token"></div>
-      <div><label for="ghToken">GitHub token (<a href="https://github.com/settings/tokens/new?scopes=repo&amp;description=Daily%20Task%20Report" target="_blank" rel="noopener">create one</a> – needs <b>repo</b> scope for private repos)</label><input id="ghToken" type="password" autocomplete="off" placeholder="ghp_… – kept only in this browser"></div>
-      <div class="hint">All repos the token can see, commits from every branch; merge commits skipped, duplicates removed. Without a token only each repo’s default branch is searched.</div>
-    </div>
-    <div class="set-sec">
-      <h4><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1c.6 5.6 5.4 10.4 11 11-5.6.6-10.4 5.4-11 11-.6-5.6-5.4-10.4-11-11 5.6-.6 10.4-5.4 11-11z"/></svg>Google Gemini</h4>
-      <div><label for="aiKey">Gemini API key (free: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>)</label><input id="aiKey" type="password" autocomplete="off" placeholder="Paste your key once – it is kept only in this browser"></div>
-    </div>
-  </div>
-  <div class="set-foot"><span class="msg" id="setMsg">Saved only in this browser.</span><button type="button" class="primary" id="setSave">Save</button></div>
-</dialog>
 
 <div class="undo" id="undoBar" role="status" aria-live="polite"><span id="undoMsg"></span><button type="button" id="undoBtn">↶ Undo</button></div>
-<div class="toast" id="toast" aria-hidden="true"></div>
+
+<script>Layout.dialogs();</script>
 
 <!-- Scripts: classic scripts share one global scope, so the order matters -->
 <script>
 loadAssets([
-  'js/signature.js', 'js/docx-builder.js', 'js/report-form.js', 'js/report-csv.js', 'js/gemini.js',
-  'js/github.js', 'js/report-actions.js', 'js/ui.js', 'js/sqa.js', 'js/shell.js',
+  'js/common.js', 'js/signature.js', 'js/docx-builder.js', 'js/report-form.js', 'js/report-csv.js',
+  'js/gemini.js', 'js/github.js', 'js/report-actions.js', 'js/sqa-fetch.js', 'js/ui.js',
+  'js/shell.js',
 ]);
 </script>
 </body>

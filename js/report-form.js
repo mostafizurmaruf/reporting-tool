@@ -1,6 +1,5 @@
 /* ===== Form logic ===== */
-const KEY = 'versatilo-daily-task-v1';
-const $ = id => document.getElementById(id);
+const KEY = REPORT_KEY;
 const tbody = $('tasks');
 const store = {
   ok: (() => { try { localStorage.setItem(KEY + '-t', '1'); const r = localStorage.getItem(KEY + '-t') === '1'; localStorage.removeItem(KEY + '-t'); return r; } catch { return false; } })(),
@@ -12,7 +11,6 @@ const NO_STORE = 'Auto-save is blocked in this browser (private mode or blocked 
 const NOT_STORED = ['tasks', 'manual', 'sAssigned', 'sDone', 'sPending', 'sOverall', 'repDate', 'inTime', 'outTime', 'empSign'];
 // Default values (editable – your changes are saved) and per-day defaults applied every time the page opens
 const FIXED = { designation: 'Software Developer', dept: 'IT', manager: 'Afsana Tanni' };
-const today = () => { const n = new Date(); return [n.getFullYear(), String(n.getMonth() + 1).padStart(2, '0'), String(n.getDate()).padStart(2, '0')].join('-'); };
 const DEFAULTS = () => ({ inTime: '11:15', outTime: '19:15', repDate: today() });
 // Employee Signature = "Name" + "DD/MM/YYYY, Out Time" from the fields above (read-only, always auto)
 function autoSign() {
@@ -130,7 +128,6 @@ function autoSummary() {
   const done = filled.filter(t => Number(t.pct) >= 100).length;
   const vals = { sAssigned: filled.length, sDone: done, sPending: filled.length - done };
   for (const k in vals) if (!manual[k]) $(k).value = filled.length ? vals[k] : '';
-  document.dispatchEvent(new Event("report:summary"));   // lets the dashboard stat cards refresh
 }
 let saveT;
 function saveNow() {
@@ -184,11 +181,4 @@ document.addEventListener('input', e => {
 document.addEventListener('change', onChange);
 $('addRow').onclick = () => { addRow(); onChange(); tbody.lastElementChild.querySelector('textarea').focus(); };
 $('printBtn').onclick = () => window.print();
-// Show / hide a spinning loader on a button (and next to the status text) while work is running
-let busyCount = 0;
-function setBusy(btns, on) {
-  [].concat(btns).forEach(b => { b.disabled = on; b.classList.toggle('busy', on); b.setAttribute('aria-busy', on); });
-  busyCount = Math.max(0, busyCount + (on ? 1 : -1));
-  $('status').classList.toggle('busy', busyCount > 0);
-}
 

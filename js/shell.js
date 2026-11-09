@@ -1,6 +1,6 @@
 /* =====================================================================
-   App shell: sidebar navigation, mobile menu, theme switch,
-   breadcrumb and sidebar user card.
+   App shell (every page): mobile menu, theme switch, version badge
+   and sidebar user card. The markup itself comes from layout.js.
    Loaded last – it only reads what the other scripts render.
    ===================================================================== */
 (() => {
@@ -17,12 +17,6 @@
   menuBtn.onclick = () => setNav(!body.classList.contains('nav-open'));
   scrim.onclick = () => setNav(false);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && body.classList.contains('nav-open')) setNav(false); });
-  ['modeReport', 'modeDocs'].forEach(id => $(id).addEventListener('click', () => { setNav(false); scrollTo({ top: 0 }); }));
-
-  /* ---------- Breadcrumb follows the active tool ---------- */
-  const syncCrumb = () => { $('crumbPage').textContent = body.classList.contains('docmode') ? 'SQA Tool' : 'Daily Report'; };
-  new MutationObserver(syncCrumb).observe(body, { attributes: true, attributeFilter: ['class'] });
-  syncCrumb();
 
   /* ---------- Settings (sidebar item; LIVE / NULL badge is kept up to date by ui.js) ---------- */
   $('navSettings').onclick = () => { setNav(false); openSettings(); };
@@ -44,9 +38,10 @@
   /* ---------- Today chip ---------- */
   $('todayChip').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
 
-  /* ---------- Sidebar user card (from Employee Name / Designation) ---------- */
+  /* ---------- Sidebar user card (Employee Name / Designation; saved values on other pages) ---------- */
   const syncUser = () => {
-    const name = $('empName').value.trim(), role = $('designation').value.trim();
+    const saved = savedEmployee();
+    const name = $('empName') ? $('empName').value.trim() : saved.name, role = $('designation') ? $('designation').value.trim() : saved.role;
     $('sideName').textContent = name || 'Your name';
     $('sideRole').textContent = role || 'Employee';
     $('sideAvatar').textContent = name ? name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() : '?';
@@ -59,8 +54,7 @@
     queued = true;
     requestAnimationFrame(() => { queued = false; syncUser(); });
   };
-  ['input', 'change', 'click', 'report:summary'].forEach(ev => document.addEventListener(ev, refresh));
-  new MutationObserver(refresh).observe($('tasks'), { childList: true });
-  new MutationObserver(refresh).observe($('mEditor'), { childList: true });
+  ['input', 'change'].forEach(ev => document.addEventListener(ev, refresh));
+  if ($('tasks')) new MutationObserver(refresh).observe($('tasks'), { childList: true });   // e.g. after CSV import / load
   refresh();
 })();

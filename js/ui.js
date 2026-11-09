@@ -28,8 +28,9 @@
   const src = document.getElementById('status'), el = document.getElementById('toast'); let hideT;
   const show = () => {
     const t = src.textContent.trim();
+    // Idle hints ("… saved automatically in this browser.") stay in the status bar only – no toast
+    if (!t || /saved automatically in this browser\.$/.test(t)) { el.classList.remove('show'); return; }
     el.textContent = t;
-    if (!t) { el.classList.remove('show'); return; }
     el.classList.add('show'); clearTimeout(hideT);
     if (!t.endsWith('…')) hideT = setTimeout(() => el.classList.remove('show'), Math.min(8000, 2500 + t.length * 40));   // in-progress messages stay until replaced
   };

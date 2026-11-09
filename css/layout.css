@@ -14,13 +14,14 @@
 .side-nav{flex:1;overflow-y:auto;padding:14px 12px}
 .nav-label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--side-muted);padding:12px 10px 8px}
 .nav-item{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:10px;background:transparent;color:var(--side-ink);padding:10px 12px;margin-bottom:4px}
+a.nav-item{text-decoration:none;box-sizing:border-box}
 .nav-item:hover{background:var(--side-hover);border-color:transparent}
 .nav-item svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
 .nav-item b{display:block;font-weight:600;font-size:13.5px}
 .nav-item small{display:block;font-size:11.5px;color:var(--side-muted)}
-.nav-item[aria-selected="true"]{background:var(--side-active);color:#fff}
-.nav-item[aria-selected="true"] svg{color:#5aa2ff;opacity:1}
-.nav-item[aria-selected="true"]::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#5aa2ff}
+.nav-item[aria-current="page"]{background:var(--side-active);color:#fff}
+.nav-item[aria-current="page"] svg{color:#5aa2ff;opacity:1}
+.nav-item[aria-current="page"]::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:#5aa2ff}
 .nav-item .live{margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:2px 7px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--side-muted);background:rgba(255,255,255,.06)}
 .nav-item .live.on{color:#22c55e;background:rgba(34,197,94,.14)}
 .nav-item .live.on::before{content:"";width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:livePulse 1.8s infinite}
@@ -54,9 +55,6 @@ header.doc h1{margin:0 0 4px;font-size:11.5px;font-weight:700;letter-spacing:.14
 header.doc h2{margin:0 0 4px;font-size:21px;font-weight:700;letter-spacing:.01em}
 header.doc p{margin:0;color:var(--muted);font-size:13px}
 
-/* Show one tool at a time */
-body.docmode #reportView,body:not(.docmode) #docView{display:none}
-body.docmode .r-only,body:not(.docmode) .d-only{display:none}
 #docPrint{display:none}
 
 /* ----- Responsive: off-canvas sidebar ----- */

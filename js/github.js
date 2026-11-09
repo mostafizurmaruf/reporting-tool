@@ -210,4 +210,3 @@ async function copyText(text) {
   if (!ok) throw new Error('Copy was blocked by the browser.');
 }
 const warn = n => n ? ` (${n} repo/branch checks skipped – GitHub rate limit${$('ghToken').value.trim() ? '' : '; add a token in ⚙ Settings'})` : '';
-const fmtDay = day => { const [y, m, d] = day.split('-'); return `${d}/${m}/${y}`; };
