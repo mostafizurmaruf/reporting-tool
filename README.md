@@ -45,10 +45,11 @@ js/                   (classic scripts – load order matters)
 
 ## Fetch Google Doc
 
-Each person pastes the links of their own work docs in ⚙ Settings → Google Docs (one per line). **⬇ Fetch Google Doc** signs in with Google
-(read-only `documents.readonly` scope, token kept in this browser for ~1 hour), reads every doc and takes the part for the Reporting Date:
+Each person pastes the links of their own work Google Docs and/or Google Sheets in ⚙ Settings (one per line). **⬇ Fetch Google Doc** signs in with Google
+(read-only `documents.readonly` + `spreadsheets.readonly` scopes, token kept in this browser for ~1 hour), reads every doc and takes the part for the Reporting Date:
 
-1. **Dated doc (best):** every line / heading with that date (`09/11/2026`, `2026-11-09`, `9 Nov 2026`, …) up to the next date.
+1. **Dated (best):** in a doc, every line / heading with that date (`09/11/2026`, `2026-11-09`, `9 Nov 2026`, …) up to the next date;
+   in a sheet, every row with that date in a cell (with the column names). Sheets in a US locale read `11/09/2026` as MM/DD.
 2. **No dates:** what was added or changed since the last fetch on an earlier day (a copy of the doc is kept in this browser).
 3. **First fetch of an undated doc:** the end of the doc – Gemini guesses the latest work.
 
@@ -58,8 +59,8 @@ Gemini then writes the rows in one go (Work Source = the doc's title). Fetching 
 
 The OAuth Client ID is `GOOGLE_CLIENT_ID` at the top of `js/gdocs.js`.
 
-1. [console.cloud.google.com](https://console.cloud.google.com) → the project → **APIs & Services → Library** → enable **Google Docs API**.
-2. **OAuth consent screen**: User type *External*, app name, support email. Scope: `.../auth/documents.readonly`.
+1. [console.cloud.google.com](https://console.cloud.google.com) → the project → **APIs & Services → Library** → enable **Google Docs API** and **Google Sheets API**.
+2. **OAuth consent screen**: User type *External*, app name, support email. Scopes: `.../auth/documents.readonly` and `.../auth/spreadsheets.readonly`.
    Publishing status *Testing* → add every team member's Google account under **Test users** (max 100).
 3. **Credentials → OAuth client ID (Web application)** → Authorized JavaScript origins: `https://mostafizurmaruf.github.io`
    (add `http://localhost:8000` too for local testing). No redirect URI needed.
@@ -69,7 +70,7 @@ The OAuth Client ID is `GOOGLE_CLIENT_ID` at the top of `js/gdocs.js`.
 The version is set in **one place** – `js/version.js`:
 
 ```js
-window.APP_VERSION = '1.6.1';
+window.APP_VERSION = '1.7.0';
 ```
 
 Every page loads `js/version.js` with a fresh `?t=…` (so it is never cached), and every other CSS/JS file is loaded through `loadAssets()` with `?v=<APP_VERSION>`. The sidebar shows the same number next to the app name.

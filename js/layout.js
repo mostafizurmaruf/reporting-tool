@@ -78,9 +78,9 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
       <div><label for="aiKey">Gemini API key (free: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>)</label><input id="aiKey" type="password" autocomplete="off" placeholder="Paste your key once – it is kept only in this browser"></div>
     </div>
     <div class="set-sec">
-      <h4><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm-1 1.5L18.5 9H13zM8 13h8v1.5H8zm0 3h8v1.5H8zm0-6h4v1.5H8z"/></svg>Google Docs</h4>
-      <div><label for="gdocUrl">Your work docs (Google Docs links – one per line)</label><textarea id="gdocUrl" rows="3" autocomplete="off" spellcheck="false" placeholder="https://docs.google.com/document/d/…&#10;https://docs.google.com/document/d/…"></textarea></div>
-      <div class="hint">⬇ Fetch Google Doc signs in with Google once (read-only) and takes the part of each doc written on the Reporting Date. Best: start each day with a date heading like 09/11/2026.</div>
+      <h4><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm-1 1.5L18.5 9H13zM8 13h8v1.5H8zm0 3h8v1.5H8zm0-6h4v1.5H8z"/></svg>Google Docs &amp; Sheets</h4>
+      <div><label for="gdocUrl">Your work docs / sheets (Google Docs or Sheets links – one per line)</label><textarea id="gdocUrl" rows="3" autocomplete="off" spellcheck="false" placeholder="https://docs.google.com/document/d/…&#10;https://docs.google.com/spreadsheets/d/…"></textarea></div>
+      <div class="hint">⬇ Fetch Google Doc signs in with Google once (read-only) and takes the part written on the Reporting Date – in a doc, under a date heading like 09/11/2026; in a sheet, the rows with that date in a Date column.</div>
     </div>
   </div>
   <div class="set-foot"><span class="msg" id="setMsg">Saved only in this browser.</span><button type="button" class="primary" id="setSave">Save</button></div>

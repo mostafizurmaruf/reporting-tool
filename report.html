@@ -61,11 +61,11 @@
       <button type="button" id="csvTpl">Download CSV template</button>
       <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
       <button type="button" class="primary" id="ghFetch">⬇ Fetch commits</button>
-      <button type="button" class="primary" id="gdFetch" title="Fill the report from your Google Docs (links in ⚙ Settings)">⬇ Fetch Google Doc</button>
+      <button type="button" class="primary" id="gdFetch" title="Fill the report from your Google Docs / Sheets (links in ⚙ Settings)">⬇ Fetch Google Doc</button>
     </div>
     <div class="hint">CSV columns: Task Assigned / Undertaken, Work Source / Instructed By, Work Done / Measurable Output, Completion (%), Pending Tasks / Delay Reason / Remarks. An SL column is optional. Uploading replaces the rows above.</div>
     <div class="hint">⬇ Fetch commits gets every commit you authored on the Reporting Date; with a Gemini key, related commits are grouped and rewritten as plain-language tasks with “Work Done” filled in and the repo name as “Work Source” – review and edit before submitting. 📋 Copy commits still gives the raw commit list and links. Add your GitHub token and Gemini key once under ⚙ Settings.</div>
-    <div class="hint">⬇ Fetch Google Doc reads your work docs (links in ⚙ Settings, one per line) after a Google sign-in and takes the part of each doc dated the Reporting Date – start each day with a date heading like 09/11/2026. Without dates it uses what changed since your last fetch. Gemini writes the rows; review before submitting.</div>
+    <div class="hint">⬇ Fetch Google Doc reads your work docs and sheets (links in ⚙ Settings, one per line) after a Google sign-in and takes the part dated the Reporting Date – in a doc, start each day with a date heading like 09/11/2026; in a sheet, keep a Date column. Without dates it uses what changed since your last fetch. Gemini writes the rows; review before submitting.</div>
     <div class="note">Add rows as required. Report each task separately. Record actual progress at the time of departure.</div>
   </section>
 
