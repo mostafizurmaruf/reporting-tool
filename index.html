@@ -5,12 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Daily Task Report</title>
 <script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
-<link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/report.css">
-<link rel="stylesheet" href="css/sqa.css">
-<link rel="stylesheet" href="css/print.css">
+<script>
+/* ===== App version – the ONLY place to change it =====
+   Bump this after editing any CSS/JS: every file below is loaded with ?v=<version>,
+   so browsers fetch the new files without Ctrl+F5. The sidebar shows the same number. */
+window.APP_VERSION = '1.1.0';
+window.loadAssets = files => files.forEach(f => document.write(f.endsWith('.css')
+  ? `<link rel="stylesheet" href="${f}?v=${APP_VERSION}">`
+  : `<script src="${f}?v=${APP_VERSION}"><\/script>`));
+loadAssets(['css/base.css', 'css/layout.css', 'css/components.css', 'css/report.css', 'css/sqa.css', 'css/print.css']);
+</script>
 </head>
 <body>
 <div class="app">
@@ -18,7 +22,7 @@
   <aside class="sidebar" id="sidebar" aria-label="Main navigation">
     <div class="brand">
       <span class="logo" aria-hidden="true">V</span>
-      <div><b>Versatilo</b><small>Reporting Suite</small></div>
+      <div><b>Versatilo <span class="ver" id="appVer"></span></b><small>Reporting Suite</small></div>
     </div>
 
     <nav class="side-nav">
@@ -96,7 +100,7 @@
     </section>
   </div>
 
-  </div>
+  <div id="reportView">
 
   <section class="card">
     <h3>EMPLOYEE DETAILS</h3>
@@ -228,15 +232,11 @@
 <div class="toast" id="toast" aria-hidden="true"></div>
 
 <!-- Scripts: classic scripts share one global scope, so the order matters -->
-<script src="js/signature.js"></script>
-<script src="js/docx-builder.js"></script>
-<script src="js/report-form.js"></script>
-<script src="js/report-csv.js"></script>
-<script src="js/gemini.js"></script>
-<script src="js/github.js"></script>
-<script src="js/report-actions.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/sqa.js"></script>
-<script src="js/shell.js"></script>
+<script>
+loadAssets([
+  'js/signature.js', 'js/docx-builder.js', 'js/report-form.js', 'js/report-csv.js', 'js/gemini.js',
+  'js/github.js', 'js/report-actions.js', 'js/ui.js', 'js/sqa.js', 'js/shell.js',
+]);
+</script>
 </body>
 </html>

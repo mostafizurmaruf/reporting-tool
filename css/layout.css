@@ -9,6 +9,7 @@
 .brand .logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:17px;color:#fff;background:linear-gradient(135deg,#2563eb,#17a2b8)}
 .brand b{display:block;color:#fff;font-size:15px;letter-spacing:.02em}
 .brand small{display:block;color:var(--side-muted);font-size:11.5px}
+.brand .ver{display:inline-block;margin-left:4px;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.03em;vertical-align:2px;color:var(--side-muted);background:rgba(255,255,255,.08)}
 
 .side-nav{flex:1;overflow-y:auto;padding:14px 12px}
 .nav-label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--side-muted);padding:12px 10px 8px}

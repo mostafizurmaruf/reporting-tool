@@ -38,6 +38,9 @@
   applyTheme(theme);
   $('themeBtn').onclick = () => { theme = ORDER[(ORDER.indexOf(theme) + 1) % ORDER.length]; ls.set(THEME_KEY, theme); applyTheme(theme); };
 
+  /* ---------- App version (set once in index.html as APP_VERSION) ---------- */
+  if (window.APP_VERSION) $('appVer').textContent = 'v' + APP_VERSION; else $('appVer').remove();
+
   /* ---------- Today chip ---------- */
   $('todayChip').textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
 
