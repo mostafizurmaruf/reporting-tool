@@ -1,10 +1,10 @@
 /* =====================================================================
    Shared page chrome for every page (index.html, sqa.html):
-   sidebar, top bar and the Settings dialog. Each page (index.html, sqa.html, editor.html) writes them in place with
+   sidebar, top bar and the Settings dialog. Each page (index.html, sqa.html, editor.html, icons.html) writes them in place with
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { report: 'Daily Report', sqa: 'SQA Tool', editor: 'Edit Document' };
+  const PAGES = { report: 'Daily Report', sqa: 'SQA Tool', editor: 'Edit Document', icons: 'Icon Generator' };
   const w = html => document.write(html);
 
   function sidebar(page) {
@@ -26,6 +26,9 @@ const Layout = (() => {
       </a>
       <a class="nav-item" href="editor.html" id="navEditor"${cur('editor')}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5v3"/><path d="M18.4 13.6a1.9 1.9 0 0 1 2.7 2.7L16 21.4l-3.4.7.7-3.4z"/></svg><span><b>Edit Document</b><small>Upload PDF / DOCX &amp; edit</small></span>
+      </a>
+      <a class="nav-item" href="icons.html" id="navIcons"${cur('icons')}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/></svg><span><b>Icon Generator</b><small>Android &amp; iOS app icons</small></span>
       </a>
 
       <div class="nav-label">Preferences</div>

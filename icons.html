@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Icon Generator</title>
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/icons.css', 'css/print.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('icons');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('icons');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>LAUNCHER ICON GENERATOR</h2>
+        <p>Add your logo, set the background and padding, then download every Android and iOS launcher icon size in one ZIP</p>
+      </header>
+
+      <div class="ic-grid">
+        <!-- ----- Controls ----- -->
+        <section class="card ic-ctrl">
+          <h3>1 · LOGO</h3>
+          <label class="drop ic-drop" id="icDrop" for="icFile">
+            <img id="icThumb" alt="" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true" id="icDropIcon"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <b id="icDropText">Drop your logo here, or click to choose</b>
+            <small>PNG with a transparent background works best (SVG / JPG / WebP also work). You can also paste with <kbd>Ctrl</kbd>+<kbd>V</kbd>.</small>
+          </label>
+          <input type="file" id="icFile" accept="image/*" hidden>
+          <label class="ic-check"><input type="checkbox" id="icTrim" checked> Trim empty transparent edges</label>
+          <div class="ic-row">
+            <span class="ic-lbl">Logo colour</span>
+            <div class="seg" id="icTint" role="group" aria-label="Logo colour">
+              <button type="button" data-v="original" aria-pressed="true">Original</button><button type="button" data-v="white" aria-pressed="false">White</button><button type="button" data-v="black" aria-pressed="false">Black</button>
+            </div>
+          </div>
+
+          <h3 class="ic-h">2 · BACKGROUND</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Type</span>
+            <div class="seg" id="icBg" role="group" aria-label="Background type">
+              <button type="button" data-v="solid" aria-pressed="true">Solid</button><button type="button" data-v="gradient" aria-pressed="false">Gradient</button><button type="button" data-v="transparent" aria-pressed="false">Transparent</button>
+            </div>
+          </div>
+          <div class="ic-row" id="icColors">
+            <span class="ic-lbl">Colour</span>
+            <div class="ic-colors">
+              <input type="color" id="icC1" value="#2563eb" aria-label="Background colour">
+              <input type="color" id="icC2" value="#17a2b8" aria-label="Gradient end colour" hidden>
+              <div class="ic-sw" id="icSwatches" aria-label="Preset colours"></div>
+            </div>
+          </div>
+
+          <h3 class="ic-h">3 · SIZE &amp; SHAPE</h3>
+          <div class="ic-row">
+            <label class="ic-lbl" for="icPad">Padding</label>
+            <input type="range" id="icPad" min="0" max="40" value="16">
+            <output id="icPadOut" for="icPad">16%</output>
+          </div>
+          <div class="ic-row">
+            <span class="ic-lbl">Android legacy shape</span>
+            <div class="seg" id="icShape" role="group" aria-label="Android legacy icon shape">
+              <button type="button" data-v="square" aria-pressed="false">Square</button><button type="button" data-v="rounded" aria-pressed="true">Rounded</button><button type="button" data-v="circle" aria-pressed="false">Circle</button>
+            </div>
+          </div>
+
+          <h3 class="ic-h">4 · DOWNLOAD</h3>
+          <label class="ic-check"><input type="checkbox" id="icAndroid" checked> Android – mipmap (mdpi → xxxhdpi), round, adaptive icon, Play Store 512</label>
+          <label class="ic-check"><input type="checkbox" id="icIos" checked> iOS – AppIcon.appiconset for Xcode (iPhone, iPad, App Store 1024)</label>
+          <div class="hint" id="icNote"></div>
+        </section>
+
+        <!-- ----- Preview ----- -->
+        <section class="card ic-prev">
+          <h3>PREVIEW</h3>
+          <div class="ic-master"><canvas id="pvMaster" width="480" height="480" aria-label="Icon preview"></canvas></div>
+          <div class="ic-home" id="pvHome"></div>
+          <div class="hint">Adaptive icons: each phone maker cuts the icon to its own shape, so keep the logo inside the circle. Padding of 15–25% is usually right.</div>
+        </section>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite" data-idle="Add a logo to start.">Add a logo to start.</span>
+      <button type="button" class="primary" id="icSave" disabled>Download ZIP</button>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/ui.js',
+  'js/icon-gen.js', 'js/shell.js',
+]);
+</script>
+</body>
+</html>

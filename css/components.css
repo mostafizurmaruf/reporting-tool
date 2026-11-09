@@ -10,6 +10,13 @@
 .row-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .empty{color:var(--muted);text-align:center;padding:28px 10px}
 
+/* ----- File drop zone (Edit Document, Icon Generator) ----- */
+.drop{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0;padding:34px 16px;border:2px dashed var(--line);border-radius:12px;text-align:center;cursor:pointer;color:var(--muted);transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.drop svg{width:34px;height:34px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.drop b{color:var(--ink);font-size:14.5px}
+.drop small{font-size:12px;font-weight:500}
+
 /* ----- Tables ----- */
 .tbl{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:10px}
 table{width:100%;border-collapse:collapse;min-width:860px}

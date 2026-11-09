@@ -1,0 +1,39 @@
+/* =====================================================================
+   Icon Generator page: controls, live preview, home-screen mock
+   ===================================================================== */
+.ic-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:1100px){.ic-grid{grid-template-columns:1fr}}
+.ic-prev{position:sticky;top:calc(var(--top-h) + 16px)}
+@media (max-width:1100px){.ic-prev{position:static}}
+.ic-h{margin-top:22px}
+
+.ic-drop{padding:20px 14px}
+.ic-drop img{width:72px;height:72px;object-fit:contain;border-radius:8px;background:repeating-conic-gradient(#e6e9ee 0 25%,#fff 0 50%) 0 0/14px 14px}
+.ic-drop svg[hidden],.ic-drop img[hidden]{display:none}
+
+.ic-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.ic-lbl{min-width:120px;margin:0;font-size:12.5px;font-weight:600;color:var(--muted)}
+.ic-row input[type=range]{flex:1;min-width:140px;padding:0;accent-color:var(--accent);border:0;box-shadow:none}
+.ic-row output{min-width:42px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.ic-check{display:flex;gap:8px;align-items:flex-start;margin:12px 0 0;font-size:13px;font-weight:500;color:var(--ink)}
+.ic-check input{width:16px;height:16px;margin:2px 0 0;flex:none;accent-color:var(--accent)}
+
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:7px 12px;font-size:13px}
+.seg button + button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+
+.ic-colors{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ic-colors input[type=color]{width:42px;height:34px;padding:2px;cursor:pointer}
+.ic-colors input[hidden]{display:none}
+.ic-sw{display:flex;gap:6px;flex-wrap:wrap}
+.ic-sw button{width:24px;height:24px;padding:0;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1px var(--line)}
+.ic-sw button:hover{box-shadow:0 0 0 2px var(--accent)}
+
+/* Preview */
+.ic-master{display:grid;place-items:center;padding:20px;border-radius:10px;border:1px solid var(--line);background:repeating-conic-gradient(color-mix(in srgb,var(--line) 70%,transparent) 0 25%,transparent 0 50%) 0 0/20px 20px}
+.ic-master canvas{width:min(240px,100%);height:auto;aspect-ratio:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.18))}
+.ic-home{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 6px;margin-top:16px;padding:20px 12px;border-radius:12px;background:linear-gradient(150deg,#1e3a5f,#4b2a6b 55%,#a2456b)}
+.ic-home figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.ic-home canvas{width:60px;height:60px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.ic-home figcaption{font-size:11px;line-height:1.25;color:#fff;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.5)}

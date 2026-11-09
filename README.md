@@ -1,10 +1,11 @@
 # Simple Reporting Tool
 
-Admin-panel style tool with three pages in the sidebar:
+Admin-panel style tool with four pages in the sidebar:
 
 - **Daily Report** (`index.html`) – daily task assignment & performance report (CSV import, GitHub commits, Gemini, PDF / DOCX export)
 - **SQA Tool** (`sqa.html`) – module-by-module feature documentation (Google Docs copy, DOCX, print)
 - **Edit Document** (`editor.html`) – open a PDF or DOCX report you already made, edit its text in place (click to edit, find & replace) and download it again in the same format. Runs fully in the browser; PDF editing loads pdf.js + pdf-lib from cdnjs.
+- **Icon Generator** (`icons.html`) – logo + background (solid / gradient / transparent) + padding → ZIP with every Android launcher icon (mipmap mdpi–xxxhdpi, round, adaptive layers, Play Store 512) and an iOS `AppIcon.appiconset` (RGB PNGs + Contents.json). Offline.
 
 Open `index.html` in a browser – no build step.
 
@@ -14,6 +15,7 @@ Open `index.html` in a browser – no build step.
 index.html            Daily Report page
 sqa.html              SQA Tool page
 editor.html           Edit Document page
+icons.html            Icon Generator page
 css/
   base.css            design tokens (light/dark), reset, forms, buttons
   layout.css          admin shell: sidebar, top bar, page header, responsive
@@ -21,6 +23,7 @@ css/
   report.css          Daily Report page
   sqa.css             SQA Tool page
   editor.css          Edit Document page
+  icons.css           Icon Generator page
   print.css           print styles
 js/                   (classic scripts – load order matters)
   version.js          APP_VERSION + asset loader (never cached)
@@ -37,6 +40,7 @@ js/                   (classic scripts – load order matters)
   ui.js               settings dialog, status toast
   sqa.js              SQA documentation builder             (SQA Tool)
   doc-editor.js       open / edit / re-save PDF & DOCX      (Edit Document)
+  icon-gen.js         launcher icon rendering + ZIP         (Icon Generator)
   shell.js            mobile menu, theme, version badge, user card
 ```
 
@@ -45,7 +49,7 @@ js/                   (classic scripts – load order matters)
 The version is set in **one place** – `js/version.js`:
 
 ```js
-window.APP_VERSION = '1.3.0';
+window.APP_VERSION = '1.4.0';
 ```
 
 Every page loads `js/version.js` with a fresh `?t=…` (so it is never cached), and every other CSS/JS file is loaded through `loadAssets()` with `?v=<APP_VERSION>`. The sidebar shows the same number next to the app name.
