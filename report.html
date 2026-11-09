@@ -61,11 +61,9 @@
       <button type="button" id="csvTpl">Download CSV template</button>
       <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
       <button type="button" class="primary" id="ghFetch">⬇ Fetch commits</button>
-      <button type="button" class="primary" id="sqaFetch" title="SQA team: fill the report from today's work on the SQA Tool page">⬇ Fetch SQA work</button>
     </div>
     <div class="hint">CSV columns: Task Assigned / Undertaken, Work Source / Instructed By, Work Done / Measurable Output, Completion (%), Pending Tasks / Delay Reason / Remarks. An SL column is optional. Uploading replaces the rows above.</div>
     <div class="hint">⬇ Fetch commits gets every commit you authored on the Reporting Date; with a Gemini key, related commits are grouped and rewritten as plain-language tasks with “Work Done” filled in and the repo name as “Work Source” – review and edit before submitting. 📋 Copy commits still gives the raw commit list and links. Add your GitHub token and Gemini key once under ⚙ Settings.</div>
-    <div class="hint"><b>SQA team:</b> ⬇ Fetch SQA work fills the rows from what you wrote on the SQA Tool page on the Reporting Date (modules, new and updated sections, exports). Completion % and pending sections are worked out from the document itself; with a Gemini key the rows are written in plain language.</div>
     <div class="note">Add rows as required. Report each task separately. Record actual progress at the time of departure.</div>
   </section>
 
@@ -121,7 +119,7 @@
 <script>
 loadAssets([
   'js/common.js', 'js/signature.js', 'js/docx-builder.js', 'js/report-form.js', 'js/report-csv.js',
-  'js/gemini.js', 'js/github.js', 'js/report-actions.js', 'js/sqa-fetch.js', 'js/ui.js',
+  'js/gemini.js', 'js/github.js', 'js/report-actions.js', 'js/ui.js',
   'js/shell.js',
 ]);
 </script>

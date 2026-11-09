@@ -1,10 +1,10 @@
 /* =====================================================================
    Shared page chrome for every page:
-   sidebar, top bar and the Settings dialog. Each page (index.html, report.html, sqa.html, editor.html, icons.html) writes them in place with
+   sidebar, top bar and the Settings dialog. Each page (index.html, report.html, editor.html, icons.html) writes them in place with
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { home: 'Home', report: 'Daily Report', sqa: 'SQA Tool', editor: 'Edit Document', icons: 'Icon Generator' };
+  const PAGES = { home: 'Home', report: 'Daily Report', editor: 'Edit Document', icons: 'Icon Generator' };
   const w = html => document.write(html);
 
   /* Workspace tools – the sidebar links and the Home page cards are both built from this list */
@@ -13,10 +13,6 @@ const Layout = (() => {
       desc: 'Fill in the daily task assignment &amp; performance report and export it as PDF or DOCX.',
       tags: ['CSV import', 'GitHub commits', 'Gemini', 'PDF / DOCX'],
       svg: '<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 13 2 2 4-4"/>' },
-    { page: 'sqa', id: 'navSqa', href: 'sqa.html', title: 'SQA Tool', sub: 'Feature documentation', color: '#16a34a',
-      desc: 'Write module-by-module feature documentation and share it as Google Docs, DOCX or print.',
-      tags: ['Modules', 'Google Docs copy', 'DOCX', 'Print'],
-      svg: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>' },
     { page: 'editor', id: 'navEditor', href: 'editor.html', title: 'Edit Document', sub: 'Upload PDF / DOCX &amp; edit', color: '#d97706',
       desc: 'Open a PDF or DOCX you already made, edit its text in place and download it again.',
       tags: ['PDF', 'DOCX', 'Find &amp; replace', 'In-browser'],

@@ -11,11 +11,4 @@
   header.doc{text-align:center}
   header.doc h1{font-size:26px;letter-spacing:.04em;color:var(--ink)}
   header.doc h2{font-size:16px}
-
-  /* SQA tool prints the rendered document instead of the editor */
-  body.docmode .app,body.docmode dialog{display:none}
-  body.docmode #docPrint{display:block;color:#000}
-  body.docmode #docPrint .docprev{max-width:none}
-  body.docmode #docPrint h1{break-before:page;color:#17364E}
-  body.docmode #docPrint table,body.docmode #docPrint td{border-color:#999}
 }

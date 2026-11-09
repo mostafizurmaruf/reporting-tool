@@ -3,18 +3,16 @@
 Admin-panel style tool. The home page (`index.html`) shows every tool as a large card; the sidebar links them too:
 
 - **Daily Report** (`report.html`) – daily task assignment & performance report (CSV import, GitHub commits, Gemini, PDF / DOCX export)
-- **SQA Tool** (`sqa.html`) – module-by-module feature documentation (Google Docs copy, DOCX, print)
 - **Edit Document** (`editor.html`) – open a PDF or DOCX report you already made, edit its text in place (click to edit, find & replace) and download it again in the same format. Runs fully in the browser; PDF editing loads pdf.js + pdf-lib from cdnjs.
 - **Icon Generator** (`icons.html`) – logo + background (solid / gradient / transparent) + padding → ZIP with every Android launcher icon (mipmap mdpi–xxxhdpi, round, adaptive layers, Play Store 512) and an iOS `AppIcon.appiconset` (RGB PNGs + Contents.json). Offline.
 
-Open `index.html` in a browser – no build step. Old `index.html#docs` bookmarks still go to the SQA Tool.
+Open `index.html` in a browser – no build step.
 
 ## Structure
 
 ```
 index.html            Home page – tool cards grid
 report.html           Daily Report page
-sqa.html              SQA Tool page
 editor.html           Edit Document page
 icons.html            Icon Generator page
 favicon.svg           site icon (wrench)
@@ -24,7 +22,6 @@ css/
   layout.css          admin shell: sidebar, top bar, page header, responsive
   components.css      cards, tables, dialogs, toolbar, toast
   report.css          Daily Report page
-  sqa.css             SQA Tool page
   editor.css          Edit Document page
   icons.css           Icon Generator page
   print.css           print styles
@@ -39,9 +36,7 @@ js/                   (classic scripts – load order matters)
   gemini.js           Google Gemini helpers
   github.js           GitHub commit fetching
   report-actions.js   toolbar actions, DOCX / PDF export    (Daily Report)
-  sqa-fetch.js        "Fetch SQA work" → report rows         (Daily Report)
   ui.js               settings dialog, status toast
-  sqa.js              SQA documentation builder             (SQA Tool)
   doc-editor.js       open / edit / re-save PDF & DOCX      (Edit Document)
   icon-gen.js         launcher icon rendering + ZIP         (Icon Generator)
   shell.js            mobile menu, theme, version badge, user card
@@ -52,7 +47,7 @@ js/                   (classic scripts – load order matters)
 The version is set in **one place** – `js/version.js`:
 
 ```js
-window.APP_VERSION = '1.5.0';
+window.APP_VERSION = '1.5.2';
 ```
 
 Every page loads `js/version.js` with a fresh `?t=…` (so it is never cached), and every other CSS/JS file is loaded through `loadAssets()` with `?v=<APP_VERSION>`. The sidebar shows the same number next to the app name.
