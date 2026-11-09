@@ -1,0 +1,12 @@
+/* =====================================================================
+   Daily Task Report page
+   ===================================================================== */
+.decl{display:flex;gap:10px;align-items:flex-start;font-weight:600;margin:4px 0 16px;color:var(--ink);font-size:13.5px}
+.decl input{width:auto;margin-top:3px;accent-color:var(--accent)}
+
+/* Supervisor signature box (always light: the image is on white) */
+.sigbox{border:1px solid var(--line);border-radius:8px;padding:6px 10px;min-height:76px;background:#fff;color:#283139;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.sigbox img{height:48px;width:auto}
+.sigbox div{font-size:13px;font-weight:600}
+
+#guides li{color:var(--muted)}

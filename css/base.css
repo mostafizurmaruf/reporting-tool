@@ -1,0 +1,64 @@
+/* =====================================================================
+   Base: design tokens, reset, typography, form controls, buttons
+   ===================================================================== */
+:root{
+  --brand:#17364E; --ink:#1f2a37; --bg:#f3f5f9; --card:#ffffff; --line:#dfe5ee;
+  --muted:#667381; --accent:#2563eb; --field:#ffffff; --hl:#fff3b0;
+  --side:#0f2233; --side-ink:#c9d6e2; --side-muted:#7f93a6; --side-hover:rgba(255,255,255,.06); --side-active:rgba(90,162,255,.16);
+  --danger:#e5534b; --ok:#16a34a; --warn:#d97706; --violet:#7c3aed;
+  --radius:12px; --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.06);
+  --side-w:256px; --top-h:60px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --brand:#2c5a80; --ink:#e3e8ee; --bg:#0d1218; --card:#151c24; --line:#26313d;
+    --muted:#93a0ad; --accent:#5aa2ff; --field:#10161d; --hl:#4a4320;
+    --side:#0a1016; --side-ink:#c9d6e2; --side-muted:#6f8295;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --brand:#2c5a80; --ink:#e3e8ee; --bg:#0d1218; --card:#151c24; --line:#26313d;
+  --muted:#93a0ad; --accent:#5aa2ff; --field:#10161d; --hl:#4a4320;
+  --side:#0a1016; --side-ink:#c9d6e2; --side-muted:#6f8295;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h3{margin:0 0 14px;font-size:13px;letter-spacing:.06em;color:var(--ink)}
+ol{margin:0;padding-left:20px}
+ol li{margin-bottom:6px}
+a{color:var(--accent)}
+kbd,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;background:color-mix(in srgb,var(--line) 55%,transparent);padding:1px 5px;border-radius:4px}
+
+/* ----- Grids ----- */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:980px){.grid4,.grid3{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+@media (max-width:520px){.grid4,.grid3{grid-template-columns:1fr}}
+
+/* ----- Form controls ----- */
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
+input,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);font:inherit;transition:border-color .15s,box-shadow .15s}
+textarea{resize:vertical;min-height:38px}
+input:hover,textarea:hover{border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+input[readonly],textarea[readonly]{background:transparent;color:var(--muted);cursor:default;box-shadow:none}
+
+/* ----- Buttons ----- */
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;transition:background .15s,border-color .15s,color .15s}
+button:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button.primary:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
+button.icon{padding:4px 8px;color:var(--muted)}
+button.danger{border-color:var(--danger);color:var(--danger)}
+button.danger:hover{background:var(--danger);color:#fff}
+button[hidden]{display:none}
+button:disabled{opacity:.55;cursor:wait}
