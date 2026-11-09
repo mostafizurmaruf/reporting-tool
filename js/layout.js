@@ -1,10 +1,10 @@
 /* =====================================================================
    Shared page chrome for every page (index.html, sqa.html):
-   sidebar, top bar and the Settings dialog. Each page writes them in place with
+   sidebar, top bar and the Settings dialog. Each page (index.html, sqa.html, editor.html) writes them in place with
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { report: 'Daily Report', sqa: 'SQA Tool' };
+  const PAGES = { report: 'Daily Report', sqa: 'SQA Tool', editor: 'Edit Document' };
   const w = html => document.write(html);
 
   function sidebar(page) {
@@ -23,6 +23,9 @@ const Layout = (() => {
       </a>
       <a class="nav-item" href="sqa.html" id="navSqa"${cur('sqa')}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>SQA Tool</b><small>Feature documentation</small></span>
+      </a>
+      <a class="nav-item" href="editor.html" id="navEditor"${cur('editor')}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5v3"/><path d="M18.4 13.6a1.9 1.9 0 0 1 2.7 2.7L16 21.4l-3.4.7.7-3.4z"/></svg><span><b>Edit Document</b><small>Upload PDF / DOCX &amp; edit</small></span>
       </a>
 
       <div class="nav-label">Preferences</div>

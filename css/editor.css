@@ -1,0 +1,66 @@
+/* =====================================================================
+   Edit Document page: file picker, find & replace, DOCX paper, PDF pages
+   (the document itself is always shown on white paper, like the printout)
+   ===================================================================== */
+.drop{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0;padding:34px 16px;border:2px dashed var(--line);border-radius:12px;text-align:center;cursor:pointer;color:var(--muted);transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.drop svg{width:34px;height:34px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.drop b{color:var(--ink);font-size:14.5px}
+.drop small{font-size:12px;font-weight:500}
+
+.ed-file{display:flex;align-items:center;gap:12px;min-width:0}
+.ed-file > div{min-width:0;flex:1}
+.ed-file b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ed-file small{display:block;color:var(--muted);font-size:12px}
+.ed-badge{flex:none;padding:4px 9px;border-radius:6px;font-size:11px;font-weight:800;letter-spacing:.06em;color:#fff;background:var(--danger)}
+.ed-badge.docx{background:var(--accent)}
+.ed-count{flex:none;font-size:12px;font-weight:600;color:var(--muted);padding:3px 10px;border-radius:999px;background:color-mix(in srgb,var(--line) 55%,transparent)}
+.ed-count.on{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.ed-find{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-top:16px}
+@media (max-width:640px){.ed-find{grid-template-columns:1fr}}
+
+.ed-doc{display:flex;flex-direction:column;align-items:center;gap:20px;padding-bottom:20px}
+.ed-doc:empty{display:none}
+.paper{width:100%;background:#fff;color:#222;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 18px rgba(16,24,40,.12)}
+
+/* ----- DOCX ----- */
+.paper.docx{max-width:1000px;padding:48px 56px;font:15px/1.45 Aptos,Calibri,"Segoe UI",Arial,sans-serif}
+@media (max-width:640px){.paper.docx{padding:20px 16px}}
+.ed-part{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a96a3;margin:22px 0 6px;padding-top:12px;border-top:1px dashed #d5dbe3}
+.ed-part:first-child{margin-top:0;padding-top:0;border-top:0}
+.dp{display:flex;gap:6px;align-items:baseline;margin:0 0 4px}
+.dp .bul{flex:none;color:#666;user-select:none}
+.dp .img{flex:none;font-size:11px;color:#6b7785;background:#eef1f5;border-radius:4px;padding:1px 6px;user-select:none}
+.ed{flex:1;min-width:0;min-height:1.45em;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:3px;outline:none;padding:0 2px;margin:0 -2px;tab-size:4}
+.ed:hover{background:rgba(37,99,235,.06)}
+.ed:focus{background:rgba(37,99,235,.08);box-shadow:0 0 0 2px rgba(37,99,235,.45)}
+.ed.changed{background:#fff6c7}
+.ed.changed:focus{background:#fff1a6}
+.paper.docx table{min-width:0;width:100%;border-collapse:collapse;margin:6px 0 14px;table-layout:fixed}
+.paper.docx td{border:1px solid #444;padding:4px 6px;vertical-align:top;background:transparent}
+.paper.docx tbody tr:hover td{background:inherit}
+.paper.docx td .dp{margin:0}
+
+/* ----- PDF ----- */
+.paper.pdf{position:relative;max-width:1100px;padding:0;overflow:hidden;container-type:inline-size;border-radius:2px}
+.paper.pdf canvas{display:block;width:100%;height:auto}
+.pnum{position:absolute;right:8px;bottom:6px;font-size:11px;color:#8a96a3;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:4px;pointer-events:none}
+/* Text items over the rendered page: invisible until you click or change them */
+.ti{position:absolute;white-space:pre;line-height:1.15;color:transparent;caret-color:#111;cursor:text;outline:none;border-radius:1px;font-family:Helvetica,Arial,sans-serif}
+.ti:hover{box-shadow:0 0 0 1px rgba(37,99,235,.55);background:rgba(37,99,235,.06)}
+.ti.on,.ti.changed{color:var(--ink-s,#111);background:var(--bg-s,#fff)}
+.ti:focus{box-shadow:0 0 0 2px rgba(37,99,235,.8);z-index:2}
+.ti.changed:not(:focus){box-shadow:0 0 0 1px rgba(217,119,6,.9)}
+.ti.serif{font-family:"Times New Roman",Times,serif}
+.ti.mono{font-family:"Courier New",Courier,monospace}
+
+/* ----- Print: only the (edited) document ----- */
+@media print{
+  body.editmode .wrap > :not(.ed-doc){display:none !important}
+  body.editmode .ed-doc{gap:0;padding:0}
+  body.editmode .paper{border:0;border-radius:0;box-shadow:none;max-width:none;break-after:page}
+  body.editmode .paper.docx{padding:0}
+  body.editmode .ed.changed,body.editmode .ti{box-shadow:none !important}
+  body.editmode .ed.changed{background:transparent}
+  body.editmode .pnum{display:none}
+}
