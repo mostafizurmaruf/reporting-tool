@@ -1,22 +1,25 @@
-# Simple Reporting Tool
+# Versatilo Tool
 
-Admin-panel style tool with four pages in the sidebar:
+Admin-panel style tool. The home page (`index.html`) shows every tool as a large card; the sidebar links them too:
 
-- **Daily Report** (`index.html`) – daily task assignment & performance report (CSV import, GitHub commits, Gemini, PDF / DOCX export)
+- **Daily Report** (`report.html`) – daily task assignment & performance report (CSV import, GitHub commits, Gemini, PDF / DOCX export)
 - **SQA Tool** (`sqa.html`) – module-by-module feature documentation (Google Docs copy, DOCX, print)
 - **Edit Document** (`editor.html`) – open a PDF or DOCX report you already made, edit its text in place (click to edit, find & replace) and download it again in the same format. Runs fully in the browser; PDF editing loads pdf.js + pdf-lib from cdnjs.
 - **Icon Generator** (`icons.html`) – logo + background (solid / gradient / transparent) + padding → ZIP with every Android launcher icon (mipmap mdpi–xxxhdpi, round, adaptive layers, Play Store 512) and an iOS `AppIcon.appiconset` (RGB PNGs + Contents.json). Offline.
 
-Open `index.html` in a browser – no build step.
+Open `index.html` in a browser – no build step. Old `index.html#docs` bookmarks still go to the SQA Tool.
 
 ## Structure
 
 ```
-index.html            Daily Report page
+index.html            Home page – tool cards grid
+report.html           Daily Report page
 sqa.html              SQA Tool page
 editor.html           Edit Document page
 icons.html            Icon Generator page
+favicon.svg           site icon (wrench)
 css/
+  home.css            Home page cards
   base.css            design tokens (light/dark), reset, forms, buttons
   layout.css          admin shell: sidebar, top bar, page header, responsive
   components.css      cards, tables, dialogs, toolbar, toast
@@ -27,7 +30,7 @@ css/
   print.css           print styles
 js/                   (classic scripts – load order matters)
   version.js          APP_VERSION + asset loader (never cached)
-  layout.js           shared sidebar, top bar and Settings dialog markup
+  layout.js           shared sidebar, top bar, Settings dialog, Home cards (one TOOLS list)
   common.js           shared helpers ($, today, setBusy, storage keys)
   signature.js        embedded supervisor signature        (Daily Report)
   docx-builder.js     offline DOCX / ZIP builder

@@ -32,7 +32,7 @@
   applyTheme(theme);
   $('themeBtn').onclick = () => { theme = ORDER[(ORDER.indexOf(theme) + 1) % ORDER.length]; ls.set(THEME_KEY, theme); applyTheme(theme); };
 
-  /* ---------- App version (set once in index.html as APP_VERSION) ---------- */
+  /* ---------- App version (set once in js/version.js as APP_VERSION) ---------- */
   if (window.APP_VERSION) $('appVer').textContent = 'v' + APP_VERSION; else $('appVer').remove();
 
   /* ---------- Today chip ---------- */

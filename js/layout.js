@@ -1,35 +1,50 @@
 /* =====================================================================
-   Shared page chrome for every page (index.html, sqa.html):
-   sidebar, top bar and the Settings dialog. Each page (index.html, sqa.html, editor.html, icons.html) writes them in place with
+   Shared page chrome for every page:
+   sidebar, top bar and the Settings dialog. Each page (index.html, report.html, sqa.html, editor.html, icons.html) writes them in place with
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { report: 'Daily Report', sqa: 'SQA Tool', editor: 'Edit Document', icons: 'Icon Generator' };
+  const PAGES = { home: 'Home', report: 'Daily Report', sqa: 'SQA Tool', editor: 'Edit Document', icons: 'Icon Generator' };
   const w = html => document.write(html);
+
+  /* Workspace tools – the sidebar links and the Home page cards are both built from this list */
+  const TOOLS = [
+    { page: 'report', id: 'navReport', href: 'report.html', title: 'Daily Report', sub: 'Task &amp; performance', color: '#2563eb',
+      desc: 'Fill in the daily task assignment &amp; performance report and export it as PDF or DOCX.',
+      tags: ['CSV import', 'GitHub commits', 'Gemini', 'PDF / DOCX'],
+      svg: '<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 13 2 2 4-4"/>' },
+    { page: 'sqa', id: 'navSqa', href: 'sqa.html', title: 'SQA Tool', sub: 'Feature documentation', color: '#16a34a',
+      desc: 'Write module-by-module feature documentation and share it as Google Docs, DOCX or print.',
+      tags: ['Modules', 'Google Docs copy', 'DOCX', 'Print'],
+      svg: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>' },
+    { page: 'editor', id: 'navEditor', href: 'editor.html', title: 'Edit Document', sub: 'Upload PDF / DOCX &amp; edit', color: '#d97706',
+      desc: 'Open a PDF or DOCX you already made, edit its text in place and download it again.',
+      tags: ['PDF', 'DOCX', 'Find &amp; replace', 'In-browser'],
+      svg: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5v3"/><path d="M18.4 13.6a1.9 1.9 0 0 1 2.7 2.7L16 21.4l-3.4.7.7-3.4z"/>' },
+    { page: 'icons', id: 'navIcons', href: 'icons.html', title: 'Icon Generator', sub: 'Android &amp; iOS app icons', color: '#7c3aed',
+      desc: 'Turn a logo into every Android and iOS launcher icon size, downloaded as one ZIP.',
+      tags: ['Android mipmaps', 'iOS AppIcon', 'Gradient', 'Offline'],
+      svg: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/>' },
+  ];
+  const HOME_SVG = '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/>';
 
   function sidebar(page) {
     const cur = p => p === page ? ' aria-current="page"' : '';
     w(`
   <aside class="sidebar" id="sidebar" aria-label="Main navigation">
-    <div class="brand">
+    <a class="brand" href="index.html" title="Home">
       <span class="logo" aria-hidden="true">V</span>
-      <div><b>Versatilo <span class="ver" id="appVer"></span></b><small>Reporting Suite</small></div>
-    </div>
+      <div><b>Versatilo <span class="ver" id="appVer"></span></b><small>Versatilo Tool</small></div>
+    </a>
 
     <nav class="side-nav">
+      <a class="nav-item" href="index.html" id="navHome"${cur('home')}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">${HOME_SVG}</svg><span><b>Home</b><small>All tools</small></span>
+      </a>
       <div class="nav-label">Workspace</div>
-      <a class="nav-item" href="index.html" id="navReport"${cur('report')}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 13 2 2 4-4"/></svg><span><b>Daily Report</b><small>Task &amp; performance</small></span>
-      </a>
-      <a class="nav-item" href="sqa.html" id="navSqa"${cur('sqa')}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>SQA Tool</b><small>Feature documentation</small></span>
-      </a>
-      <a class="nav-item" href="editor.html" id="navEditor"${cur('editor')}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5v3"/><path d="M18.4 13.6a1.9 1.9 0 0 1 2.7 2.7L16 21.4l-3.4.7.7-3.4z"/></svg><span><b>Edit Document</b><small>Upload PDF / DOCX &amp; edit</small></span>
-      </a>
-      <a class="nav-item" href="icons.html" id="navIcons"${cur('icons')}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/></svg><span><b>Icon Generator</b><small>Android &amp; iOS app icons</small></span>
-      </a>
+${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t.page)}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">${t.svg}</svg><span><b>${t.title}</b><small>${t.sub}</small></span>
+      </a>`).join('\n')}
 
       <div class="nav-label">Preferences</div>
       <button type="button" class="nav-item" id="navSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span><b>Settings</b><small>GitHub &amp; Gemini</small></span><span class="live" id="navDot" aria-label="Settings status">NULL</span></button>
@@ -77,5 +92,20 @@ const Layout = (() => {
 `);
   }
 
-  return { PAGES, sidebar, topbar, dialogs };
+  /* Home page: one big card per tool */
+  function cards() {
+    w(`
+      <div class="home-grid">
+${TOOLS.map(t => `        <a class="home-card" href="${t.href}" style="--c:${t.color}">
+          <span class="hc-icon"><svg viewBox="0 0 24 24" aria-hidden="true">${t.svg}</svg></span>
+          <h3>${t.title}</h3>
+          <p>${t.desc}</p>
+          <ul class="hc-tags">${t.tags.map(x => `<li>${x}</li>`).join('')}</ul>
+          <span class="hc-go">Open ${t.title} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>`).join('\n')}
+      </div>
+`);
+  }
+
+  return { PAGES, TOOLS, sidebar, topbar, dialogs, cards };
 })();
