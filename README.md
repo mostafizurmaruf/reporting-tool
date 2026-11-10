@@ -48,6 +48,9 @@ js/                   (classic scripts – load order matters)
 
 ## Fetch Google Doc
 
+Only for **SQA Engineers**: the **⬇ Fetch Google Doc** button and the *Google Docs & Sheets* section of ⚙ Settings appear when
+**Designation** (a select: Software Developer – the default – or SQA Engineer) is set to *SQA Engineer*.
+
 Each person pastes the links of their own work Google Docs and/or Google Sheets in ⚙ Settings (one per line). **⬇ Fetch Google Doc** signs in with Google
 (read-only `documents.readonly` + `spreadsheets.readonly`, plus `drive.file` for the Drive feature – token kept in this browser for ~1 hour), reads every doc and takes the part for the Reporting Date:
 
@@ -87,7 +90,7 @@ The OAuth Client ID is `GOOGLE_CLIENT_ID` at the top of `js/google-auth.js`.
 The version is set in **one place** – `js/version.js`:
 
 ```js
-window.APP_VERSION = '1.10.0';
+window.APP_VERSION = '1.11.0';
 ```
 
 Every page loads `js/version.js` with a fresh `?t=…` (so it is never cached), and every other CSS/JS file is loaded through `loadAssets()` with `?v=<APP_VERSION>`. The sidebar shows the same number next to the app name.

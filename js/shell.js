@@ -44,6 +44,7 @@
     const name = $('empName') ? $('empName').value.trim() : saved.name, role = $('designation') ? $('designation').value.trim() : saved.role;
     $('sideName').textContent = name || 'Your name';
     $('sideRole').textContent = role || 'Employee';
+    applyRole(role);
     $('sideAvatar').textContent = name ? name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() : '?';
   };
 

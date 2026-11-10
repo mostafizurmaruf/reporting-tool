@@ -45,10 +45,10 @@ kbd,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-s
 
 /* ----- Form controls ----- */
 label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
-input,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);font:inherit;transition:border-color .15s,box-shadow .15s}
+input,textarea,select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);font:inherit;transition:border-color .15s,box-shadow .15s}
 textarea{resize:vertical;min-height:38px}
-input:hover,textarea:hover{border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
-input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+input:hover,textarea:hover,select:hover{border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
 input[readonly],textarea[readonly]{background:transparent;color:var(--muted);cursor:default;box-shadow:none}
 
 /* ----- Buttons ----- */
@@ -62,3 +62,6 @@ button.danger{border-color:var(--danger);color:var(--danger)}
 button.danger:hover{background:var(--danger);color:#fff}
 button[hidden]{display:none}
 button:disabled{opacity:.55;cursor:wait}
+
+/* SQA-only controls (Fetch Google Doc, Google Docs & Sheets settings) – shown when Designation = SQA Engineer */
+body:not(.sqa) .sqa-only{display:none !important}

@@ -157,6 +157,7 @@ function load() {
   });
   Object.entries(DEFAULTS()).forEach(([k, v]) => $(k).value = v);
   Object.entries(FIXED).forEach(([k, v]) => { if (!$(k).value.trim()) $(k).value = v; });
+  applyRole($('designation').value);
   loadDay($('repDate').value || today());
   autoSign();
   $('supSignImg').src = 'data:image/jpeg;base64,' + SIGN_B64;
@@ -179,5 +180,7 @@ document.addEventListener('input', e => {
   onChange();
 });
 document.addEventListener('change', onChange);
+// Designation decides whether the SQA-only controls (Fetch Google Doc) are shown – apply right away
+$('designation').addEventListener('change', e => applyRole(e.target.value));
 $('addRow').onclick = () => { addRow(); onChange(); tbody.lastElementChild.querySelector('textarea').focus(); };
 

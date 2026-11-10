@@ -19,6 +19,9 @@ const driveStore = {
   get() { try { return localStorage.getItem(DRIVE_KEY) !== '0'; } catch { return true; } },
   set(on) { try { on ? localStorage.removeItem(DRIVE_KEY) : localStorage.setItem(DRIVE_KEY, '0'); } catch {} },
 };
+// "⬇ Fetch Google Doc" + its Settings section are only for SQA Engineers (Designation on the Daily Report)
+const SQA = 'SQA Engineer';
+const applyRole = role => document.body.classList.toggle('sqa', role === SQA);
 function savedEmployee() {
   try { const d = JSON.parse(localStorage.getItem(REPORT_KEY) || 'null') || {}; return { name: String(d.empName || '').trim(), role: String(d.designation || '').trim() }; }
   catch { return { name: '', role: '' }; }
