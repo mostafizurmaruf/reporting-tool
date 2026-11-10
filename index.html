@@ -3,37 +3,126 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Versatilo Tool</title>
+<title>Daily Task Report · Versatilo Tool</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
 <!-- Version + asset loader: js/version.js is the only place the version is set -->
 <script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
 <script>loadAssets([
-  'css/base.css', 'css/layout.css', 'css/components.css', 'css/home.css', 'css/print.css',
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/report.css', 'css/print.css',
   'js/layout.js',
 ]);</script>
 </head>
 <body>
 <div class="app">
-<script>Layout.sidebar('home');</script>
+<script>Layout.sidebar('report');</script>
 
   <!-- ===== Main area ===== -->
   <div class="main">
-<script>Layout.topbar('home');</script>
+<script>Layout.topbar('report');</script>
 
     <div class="wrap">
-      <h2 class="home-sec">Workspace</h2>
-<script>Layout.cards();</script>
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>DAILY TASK ASSIGNMENT &amp; PERFORMANCE REPORT</h2>
+        <p id="docSub">Reporting Period: 03–27 November 2026 | To be completed before leaving the workplace each working day</p>
+      </header>
+
+  <section class="card">
+    <h3>EMPLOYEE DETAILS</h3>
+    <div class="grid4">
+      <div><label for="empName">Employee Name</label><input id="empName" data-k="empName"></div>
+      <div><label for="empId">Employee ID</label><input id="empId" data-k="empId"></div>
+      <div><label for="designation">Designation</label><input id="designation" data-k="designation" value="Software Developer"></div>
+      <div><label for="dept">Department / Concern / Project</label><input id="dept" data-k="dept" value="IT"></div>
+      <div><label for="manager">Reporting Manager / Supervisor</label><input id="manager" data-k="manager" value="Afsana Tanni"></div>
+      <div><label for="repDate">Reporting Date</label><input id="repDate" type="date" min="2026-11-03" max="2026-11-27" data-k="repDate"></div>
+      <div><label for="inTime">Office In Time</label><input id="inTime" type="time" data-k="inTime"></div>
+      <div><label for="outTime">Office Out Time</label><input id="outTime" type="time" data-k="outTime"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>SECTION A | DAILY TASK-WISE WORK RECORD</h3>
+    <div class="tbl">
+      <table>
+        <thead><tr>
+          <th class="pick"><input type="checkbox" id="pickAll" title="Select all rows" aria-label="Select all rows"></th><th>SL</th><th>Task Assigned / Undertaken</th><th>Work Source / Instructed By</th>
+          <th>Work Done / Measurable Output</th><th>Completion (%)</th>
+          <th>Pending Tasks / Delay Reason / Remarks</th><th class="act"></th>
+        </tr></thead>
+        <tbody id="tasks"></tbody>
+      </table>
+    </div>
+    <div class="row-btns">
+      <button type="button" id="addRow">+ Add row</button>
+      <button type="button" class="danger" id="delSel" hidden>🗑 Delete selected</button>
+      <button type="button" id="csvBtn">Upload CSV</button>
+      <button type="button" id="csvTpl">Download CSV template</button>
+      <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+      <button type="button" class="primary" id="ghFetch">⬇ Fetch commits</button>
+      <button type="button" class="primary" id="gdFetch" title="Fill the report from your Google Docs / Sheets (links in ⚙ Settings)">⬇ Fetch Google Doc</button>
+    </div>
+    <div class="hint">CSV columns: Task Assigned / Undertaken, Work Source / Instructed By, Work Done / Measurable Output, Completion (%), Pending Tasks / Delay Reason / Remarks. An SL column is optional. Uploading replaces the rows above.</div>
+    <div class="hint">⬇ Fetch commits gets every commit you authored on the Reporting Date; with a Gemini key, related commits are grouped and rewritten as plain-language tasks with “Work Done” filled in and the repo name as “Work Source” – review and edit before submitting. 📋 Copy commits still gives the raw commit list and links. Add your GitHub token and Gemini key once under ⚙ Settings.</div>
+    <div class="hint">⬇ Fetch Google Doc reads your work docs and sheets (links in ⚙ Settings, one per line) after a Google sign-in and takes the part dated the Reporting Date – in a doc, start each day with a date heading like 09/11/2026; in a sheet, keep a Date column. Without dates it uses what changed since your last fetch. Gemini writes the rows; review before submitting.</div>
+    <div class="note">Add rows as required. Report each task separately. Record actual progress at the time of departure.</div>
+  </section>
+
+  <section class="card">
+    <h3>SECTION B | DAILY SUMMARY &amp; VERIFICATION</h3>
+    <div class="grid4">
+      <div><label for="sAssigned">Tasks Assigned / Undertaken</label><input id="sAssigned" type="number" min="0" data-k="sAssigned"></div>
+      <div><label for="sDone">Tasks Completed</label><input id="sDone" type="number" min="0" data-k="sDone"></div>
+      <div><label for="sPending">Tasks Pending / In Progress</label><input id="sPending" type="number" min="0" data-k="sPending"></div>
+      <div><label for="sOverall">Overall Progress % (if assessed by Supervisor)</label><input id="sOverall" type="number" min="0" max="100" data-k="sOverall"></div>
+    </div>
+    <div class="hint">The first three counts fill in automatically from Section A. You can change them by hand.</div>
+  </section>
+
+  <section class="card">
+    <label class="decl"><input type="checkbox" id="declare" data-k="declare">
+      <span>**Employee Declaration: I confirm that the above information accurately reflects the work undertaken and progress achieved today.</span></label>
+    <div class="grid3">
+      <div><label for="empSign">Employee Signature &amp; Time</label><textarea id="empSign" rows="3" data-k="empSign" readonly tabindex="-1" placeholder="Fills in from Employee Name, Reporting Date &amp; Office Out Time"></textarea></div>
+      <div><label for="supComments">Supervisor Verification / Comments</label><textarea id="supComments" rows="3" data-k="supComments"></textarea></div>
+      <div><label>Supervisor Signature &amp; Time</label><div class="sigbox"><img id="supSignImg" alt="Supervisor signature"><div id="supSignDate"></div></div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>SECTION C | COMPLETION GUIDELINES</h3>
+    <ol id="guides">
+      <li>Task Assigned / Undertaken: State each routine, management-assigned, or emergency task separately.</li>
+      <li>Work Source: Identify the job description, supervisor, department head, management instruction, meeting, or email that originated the task.</li>
+      <li>Work Done: Describe specific activities and measurable outputs achieved today.</li>
+      <li>Completion (%): Give the actual estimated progress of each task (0–100%); use 100% only when fully completed.</li>
+      <li>Remarks: State pending work, reasons for delay, dependencies, and next steps.</li>
+      <li>Employees must submit the report before leaving the workplace. Reporting authorities must verify, compile, and forward their teams’ daily reports to HR for centralized Management reporting throughout 03–27 November 2026. Management has communicated a minimum 60% performance target. Task completion percentages are not automatically an overall employee performance rating; assessments should consider task scope, evidence, and supervisory review.</li>
+    </ol>
+  </section>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite">Employee details are saved automatically in this browser.</span>
+      <button type="button" id="ghCopy" title="Copy today's GitHub projects, commit names and links">📋 Copy commits</button>
+      <button type="button" id="printBtn">Print</button>
+      <button type="button" id="pdfBtn">Download PDF</button>
+      <button type="button" class="primary" id="docxBtn">Download DOCX</button>
     </div>
   </div>
 </div>
+
+<div class="undo" id="undoBar" role="status" aria-live="polite"><span id="undoMsg"></span><button type="button" id="undoBtn">↶ Undo</button></div>
 
 <script>Layout.dialogs();</script>
 
 <!-- Scripts: classic scripts share one global scope, so the order matters -->
 <script>
 loadAssets([
-  'js/common.js', 'js/gemini.js', 'js/github.js', 'js/ui.js', 'js/shell.js',
+  'js/common.js', 'js/signature.js', 'js/docx-builder.js', 'js/report-form.js', 'js/report-csv.js',
+  'js/gemini.js', 'js/github.js', 'js/report-actions.js', 'js/gdocs.js', 'js/ui.js',
+  'js/shell.js',
 ]);
 </script>
 </body>
