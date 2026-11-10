@@ -16,6 +16,8 @@ index.html            Daily Report page (opens first)
 history.html          History page – saved reports from Google Drive
 editor.html           Edit Document page
 icons.html            Icon Generator page
+policy.html           Privacy Policy (incl. Google API Limited Use disclosure)
+service.html          Terms of Service
 favicon.svg           site icon (wrench)
 css/
   base.css            design tokens (light/dark), reset, forms, buttons

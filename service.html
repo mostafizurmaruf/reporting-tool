@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of Service · Versatilo Tool</title>
+<meta name="description" content="Terms for using Versatilo Tool.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('service');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('service');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>TERMS OF SERVICE</h2>
+        <p>The rules for using Versatilo Tool.</p>
+      </header>
+
+      <section class="card legal">
+        <p class="meta">Effective date: 10 November 2026 · Last updated: 10 November 2026</p>
+
+        <h3>1. Acceptance</h3>
+        <p>By opening or using Versatilo Tool (“the Tool”) you agree to these Terms and to our <a href="policy.html">Privacy Policy</a>. If you do not agree, do not use the Tool.</p>
+
+        <h3>2. What the Tool does</h3>
+        <p>The Tool is a free, browser-based workspace provided by Versatilo Group. It lets you prepare a daily task &amp; performance report (with optional CSV import, GitHub commits, Google Docs / Sheets fetch and Gemini AI help), export it as PDF or DOCX, save copies to your own Google Drive, edit existing PDF / DOCX reports, and generate Android / iOS app icons.</p>
+
+        <h3>3. Who may use it</h3>
+        <p>The Tool is intended for Versatilo Group employees and people authorised by Versatilo Group. You must be at least 16 years old.</p>
+
+        <h3>4. Your responsibilities</h3>
+        <ul>
+          <li>The reports you create are your own work. You are responsible for making sure their content is accurate and true.</li>
+          <li>Only connect Google, GitHub or Gemini accounts and documents you are allowed to access.</li>
+          <li>Keep your tokens, API keys and device secure. Anyone with access to your browser may see what the Tool has saved there.</li>
+          <li>Do not use the Tool to break the law, to infringe anyone’s rights, or to try to disrupt or misuse the Tool or any connected service.</li>
+        </ul>
+
+        <h3>5. Third-party services</h3>
+        <p>Features that use Google (Docs, Sheets, Drive, Gemini), GitHub or a content delivery network are subject to those providers’ own terms, including the <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Google Terms of Service</a> and <a href="https://docs.github.com/site-policy/github-terms/github-terms-of-service" target="_blank" rel="noopener">GitHub Terms of Service</a>. We are not responsible for those services, their availability or their changes.</p>
+
+        <h3>6. Your content and Google data</h3>
+        <p>You keep all rights to the content you enter, import or export. The Tool only reads and writes Google data on your behalf and only as described in the <a href="policy.html">Privacy Policy</a>. You can revoke access at any time from your Google account.</p>
+
+        <h3>7. Intellectual property</h3>
+        <p>The Tool’s design, code and branding belong to Versatilo Group, except open-source libraries, which remain under their own licences.</p>
+
+        <h3>8. No warranty</h3>
+        <p>The Tool is provided “as is” and “as available”, without warranties of any kind. We do not guarantee it will be error-free or always available, or that AI suggestions, imported data or exported files will be correct. Check every report before you submit it.</p>
+
+        <h3>9. Limitation of liability</h3>
+        <p>To the maximum extent allowed by law, Versatilo Group is not liable for any indirect or consequential loss, or for loss of data, arising from your use of the Tool. Since drafts are stored only in your browser, keep your own copies of important reports.</p>
+
+        <h3>10. Changes and termination</h3>
+        <p>We may change, suspend or stop the Tool, or update these Terms, at any time. The “Last updated” date above will change when we do. Continuing to use the Tool after a change means you accept the updated Terms. We may block access for anyone who breaks these Terms.</p>
+
+        <h3>11. Governing law</h3>
+        <p>These Terms are governed by the laws of Bangladesh.</p>
+
+        <h3>12. Contact</h3>
+        <p>Questions about these Terms: Versatilo Group IT department, <a href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</a>.</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/google-auth.js', 'js/drive.js', 'js/ui.js',
+  'js/shell.js',
+]);
+</script>
+</body>
+</html>

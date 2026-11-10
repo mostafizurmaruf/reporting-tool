@@ -1,10 +1,10 @@
 /* =====================================================================
    Shared page chrome for every page:
-   sidebar, top bar and the Settings dialog. Each page (index.html = Daily Report, history.html, editor.html, icons.html) writes them in place with
+   sidebar, top bar and the Settings dialog. Each page (index.html = Daily Report, history.html, editor.html, icons.html, policy.html, service.html) writes them in place with
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator' };
+  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', policy: 'Privacy Policy', service: 'Terms of Service' };
   const w = html => document.write(html);
 
   /* Workspace tools – the sidebar links are built from this list */
@@ -37,6 +37,10 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
       <div class="nav-label">Preferences</div>
       <button type="button" class="nav-item" id="navSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span><b>Settings</b><small>GitHub, Gemini, Docs &amp; Drive</small></span><span class="live" id="navDot" aria-label="Settings status">NULL</span></button>
       <button type="button" class="nav-item" id="themeBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span><b>Theme</b><small id="themeLabel">System</small></span></button>
+    </nav>
+
+    <nav class="side-legal" aria-label="Legal">
+      <a href="policy.html"${cur('policy')}>Privacy Policy</a><i aria-hidden="true">·</i><a href="service.html"${cur('service')}>Terms of Service</a>
     </nav>
 
     <div class="side-foot">
