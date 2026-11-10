@@ -13,6 +13,12 @@ const gdocStore = {
   get() { try { return localStorage.getItem(GDOC_KEY) || ''; } catch { return ''; } },
   set(v) { try { v ? localStorage.setItem(GDOC_KEY, v) : localStorage.removeItem(GDOC_KEY); } catch {} },
 };
+// "Save downloads to Google Drive" (⚙ Settings, per browser) – on unless switched off
+const DRIVE_KEY = 'versatilo-drive-save';
+const driveStore = {
+  get() { try { return localStorage.getItem(DRIVE_KEY) !== '0'; } catch { return true; } },
+  set(on) { try { on ? localStorage.removeItem(DRIVE_KEY) : localStorage.setItem(DRIVE_KEY, '0'); } catch {} },
+};
 function savedEmployee() {
   try { const d = JSON.parse(localStorage.getItem(REPORT_KEY) || 'null') || {}; return { name: String(d.empName || '').trim(), role: String(d.designation || '').trim() }; }
   catch { return { name: '', role: '' }; }

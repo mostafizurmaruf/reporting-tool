@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>History · Versatilo Tool</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('history');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('history');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>HISTORY · SAVED REPORTS</h2>
+        <p>Every report you downloaded as PDF or DOCX is also saved in your Google Drive (folder “Versatilo Daily Reports”). Download any earlier date here.</p>
+      </header>
+
+      <section class="card">
+        <div class="drv-bar">
+          <input id="hiFilter" type="search" placeholder="Search by date (e.g. 09/11) or file name" aria-label="Search saved reports">
+          <select id="hiType" aria-label="File type"><option value="">PDF &amp; DOCX</option><option value="pdf">PDF only</option><option value="docx">DOCX only</option></select>
+          <button type="button" class="primary" id="hiLoad">Sign in with Google</button>
+        </div>
+        <ul class="drv-list" id="hiList"></ul>
+        <div class="empty" id="hiEmpty">Sign in with Google to see your saved reports.</div>
+      </section>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite" data-idle="Your saved reports from Google Drive.">Your saved reports from Google Drive.</span>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/google-auth.js', 'js/drive.js', 'js/ui.js',
+  'js/history.js', 'js/shell.js',
+]);
+</script>
+</body>
+</html>

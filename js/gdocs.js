@@ -1,45 +1,12 @@
 /* =====================================================================
    "⬇ Fetch Google Doc" on the Daily Report page:
-   signs in with Google (read-only), reads the Docs / Sheets saved in ⚙ Settings,
+   signs in with Google (js/google-auth.js), reads the Docs / Sheets saved in ⚙ Settings,
    takes the part written on the Reporting Date and lets Gemini turn it
    into report rows.
    ===================================================================== */
-// One OAuth Client ID for the whole team (public – it is not a secret).
-// Allowed origin in Google Cloud Console: https://mostafizurmaruf.github.io
-const GOOGLE_CLIENT_ID = '975024824259-ls19abs6381348d0n3ddf6tkb8r0picp.apps.googleusercontent.com';
-const GDOC_SCOPE = 'https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/spreadsheets.readonly';
-
 if (document.getElementById('gdFetch')) (() => {
-  /* ---------- Google sign-in (Google Identity Services token client) ---------- */
-  const TOKEN_KEY = 'versatilo-gdoc-token';   // localStorage: read-only token, valid ~1 hour, so reloads don't ask again
-  let gisReady = null, tokenClient = null, pending = null;
-  const loadGis = () => gisReady ||= new Promise((res, rej) => {
-    const s = document.createElement('script');
-    s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
-    s.onload = res; s.onerror = () => { gisReady = null; s.remove(); rej(new Error('Could not load Google sign-in. Check your internet connection.')); };
-    document.head.appendChild(s);
-  });
-  const savedToken = () => {
-    try { const t = JSON.parse(localStorage.getItem(TOKEN_KEY) || 'null'); return t && t.exp > Date.now() + 60000 && t.scope === GDOC_SCOPE ? t.value : ''; } catch { return ''; }
-  };
-  const saveToken = (value, secs) => { try { value ? localStorage.setItem(TOKEN_KEY, JSON.stringify({ value, scope: GDOC_SCOPE, exp: Date.now() + secs * 1000 })) : localStorage.removeItem(TOKEN_KEY); } catch {} };
-  // Must be called straight from the click (before any await), or the browser blocks the Google popup
-  function requestToken() {
-    return new Promise((resolve, reject) => {
-      const ask = () => {
-        tokenClient ||= google.accounts.oauth2.initTokenClient({
-          client_id: GOOGLE_CLIENT_ID, scope: GDOC_SCOPE,
-          callback: r => { const p = pending; pending = null; if (r.error) p?.reject(new Error('Google sign-in failed: ' + (r.error_description || r.error))); else { saveToken(r.access_token, +r.expires_in || 3600); p?.resolve(r.access_token); } },
-          error_callback: e => { const p = pending; pending = null; p?.reject(new Error(e?.type === 'popup_closed' ? 'Google sign-in was closed.' : e?.type === 'popup_failed_to_open' ? 'The browser blocked the Google sign-in popup – allow popups for this site and try again.' : 'Google sign-in failed.')); },
-        });
-        pending = { resolve, reject };
-        tokenClient.requestAccessToken({ prompt: '' });
-      };
-      if (window.google?.accounts?.oauth2) ask(); else loadGis().then(ask, reject);
-    });
-  }
   // Load the sign-in library early, so the popup opens right inside the click
-  if (gdocStore.get()) loadGis().catch(() => {});
+  if (gdocStore.get()) GoogleAuth.load().catch(() => {});
 
   /* ---------- Read the document ---------- */
   // Link → "doc/<id>" or "sheet/<id>" (a bare id counts as a doc)
@@ -50,18 +17,12 @@ if (document.getElementById('gdFetch')) (() => {
   };
   // One link per line (commas / spaces work too); duplicates removed
   const docIds = () => [...new Set(gdocStore.get().split(/[\s,]+/).map(docId).filter(Boolean))];
-  async function gapi(url, token, what) {
-    let res;
-    try { res = await fetch(url, { headers: { Authorization: 'Bearer ' + token } }); }
-    catch { throw new Error(`Could not reach Google ${what}. Check your internet connection.`); }
-    const d = await res.json().catch(() => ({})), msg = d.error?.message || '';
-    if (res.status === 401) { saveToken(''); const e = new Error('Google sign-in expired.'); e.expired = true; throw e; }
-    if (res.status === 403 && /insufficient.*scope/i.test(msg)) { saveToken(''); const e = new Error('Google needs your permission again.'); e.expired = true; throw e; }
-    if (res.status === 403) throw new Error(/has not been used|disabled/i.test(msg) ? `Google ${what} API is not enabled in the Google Cloud project.` : 'This Google account cannot open it. Sign in with the account that owns it, or share it with that account.');
-    if (res.status === 404) throw new Error('not found – check the link in ⚙ Settings.');
-    if (!res.ok) throw new Error(`Google ${what} error: ` + (msg || res.statusText));
-    return d;
-  }
+  // Google API call with friendlier messages for a doc / sheet link
+  const gapi = (url, token, what) => GoogleAuth.api(url, token, what).catch(e => {
+    if (e.status === 403) throw new Error('This Google account cannot open it. Sign in with the account that owns it, or share it with that account.');
+    if (e.status === 404) throw new Error('not found – check the link in ⚙ Settings.');
+    throw e;
+  });
   const readDoc = (id, token) => gapi(`https://docs.googleapis.com/v1/documents/${id}?includeTabsContent=true`, token, 'Docs');
   // Spreadsheet → { title, mdy, sheets: [{ title, rows: [[cell…]] }] } (cells as shown in the sheet)
   async function readSheet(id, token) {
@@ -264,8 +225,7 @@ ${docs.map((d, i) => `=== Document ${i}: "${d.title}" – ${HOW[d.mode]} ===\n${
     if (btn.disabled) return;
     if (!ids.length) return askSettings(gdocStore.get() ? 'That is not a Google Docs / Sheets link – paste links like https://docs.google.com/document/d/… or …/spreadsheets/d/…, then Save.' : 'Paste your Google Docs / Sheets link(s) – one per line – then Save.', 'gdocUrl');
     if (!($('aiKey').value.trim() || aiKeyMem)) return askSettings('Add your Gemini API key – it writes the report rows from the doc – then Save.', 'aiKey');
-    if (!gisReady) loadGis().catch(() => {});
-    const tok = savedToken(), tokenP = tok ? Promise.resolve(tok) : requestToken();   // popup opens inside the click
+    const tokenP = GoogleAuth.token();   // popup opens inside the click
     setBusy(btn, true);
     run(ids, tokenP).catch(e => { $('status').textContent = e.message; }).finally(() => setBusy(btn, false));
   };

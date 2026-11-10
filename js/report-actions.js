@@ -80,6 +80,7 @@ function reportName(d, ext) {
   return ['Daily_Task_Report', safe(d.empName), d.repDate].filter(Boolean).join('_') + '.' + ext;
 }
 $('docxBtn').onclick = () => {
+  const tokP = Drive.begin();   // Google sign-in must start inside the click
   const d = reportData();
   const bytes = DOCX.build(d);
   const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
@@ -87,6 +88,7 @@ $('docxBtn').onclick = () => {
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   $('status').textContent = 'Downloaded ' + name;
+  Drive.copy(tokP, blob, name, d.repDate, 'docx');
 };
 
 /* ===== PDF export (jsPDF + AutoTable, loaded on first use) ===== */
@@ -185,13 +187,17 @@ function buildPDF(JsPDF, d) {
   return doc;
 }
 $('pdfBtn').onclick = async () => {
+  const tokP = Drive.begin();   // Google sign-in must start inside the click, before any await
+  tokP?.catch(() => {});        // a sign-in error is reported after the download
   const btn = $('pdfBtn'); setBusy(btn, true);
   $('status').textContent = 'Preparing PDF…';
   try {
     const JsPDF = await getPdfLib();
     const d = reportData(), name = reportName(d, 'pdf');
-    buildPDF(JsPDF, d).save(name);
+    const pdf = buildPDF(JsPDF, d);
+    pdf.save(name);
     $('status').textContent = 'Downloaded ' + name;
+    Drive.copy(tokP, pdf.output('blob'), name, d.repDate, 'pdf');
   } catch (e) {
     console.error(e);
     $('status').textContent = 'PDF download failed — check your internet connection (the PDF library loads online). You can still use Print → Save as PDF.';

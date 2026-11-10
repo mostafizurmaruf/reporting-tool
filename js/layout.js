@@ -1,25 +1,21 @@
 /* =====================================================================
    Shared page chrome for every page:
-   sidebar, top bar and the Settings dialog. Each page (index.html, report.html, editor.html, icons.html) writes them in place with
+   sidebar, top bar and the Settings dialog. Each page (index.html = Daily Report, history.html, editor.html, icons.html) writes them in place with
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { home: 'Home', report: 'Daily Report', editor: 'Edit Document', icons: 'Icon Generator' };
+  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator' };
   const w = html => document.write(html);
 
-  /* Workspace tools – the sidebar links and the Home page cards are both built from this list */
+  /* Workspace tools – the sidebar links are built from this list */
   const TOOLS = [
-    { page: 'report', id: 'navReport', href: 'report.html', title: 'Daily Report', sub: 'Task &amp; performance', color: '#2563eb',
-      desc: 'Fill in the daily task assignment &amp; performance report and export it as PDF or DOCX.',
-      tags: ['CSV import', 'GitHub commits', 'Gemini', 'PDF / DOCX'],
+    { page: 'report', id: 'navReport', href: 'index.html', title: 'Daily Report', sub: 'Task &amp; performance',
       svg: '<path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 13 2 2 4-4"/>' },
-    { page: 'editor', id: 'navEditor', href: 'editor.html', title: 'Edit Document', sub: 'Upload PDF / DOCX &amp; edit', color: '#d97706',
-      desc: 'Open a PDF or DOCX you already made, edit its text in place and download it again.',
-      tags: ['PDF', 'DOCX', 'Find &amp; replace', 'In-browser'],
+    { page: 'history', id: 'navHistory', href: 'history.html', title: 'History', sub: 'Saved reports in Drive',
+      svg: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>' },
+    { page: 'editor', id: 'navEditor', href: 'editor.html', title: 'Edit Document', sub: 'Upload PDF / DOCX &amp; edit',
       svg: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5v3"/><path d="M18.4 13.6a1.9 1.9 0 0 1 2.7 2.7L16 21.4l-3.4.7.7-3.4z"/>' },
-    { page: 'icons', id: 'navIcons', href: 'icons.html', title: 'Icon Generator', sub: 'Android &amp; iOS app icons', color: '#7c3aed',
-      desc: 'Turn a logo into every Android and iOS launcher icon size, downloaded as one ZIP.',
-      tags: ['Android mipmaps', 'iOS AppIcon', 'Gradient', 'Offline'],
+    { page: 'icons', id: 'navIcons', href: 'icons.html', title: 'Icon Generator', sub: 'Android &amp; iOS app icons',
       svg: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/>' },
   ];
 
@@ -27,7 +23,7 @@ const Layout = (() => {
     const cur = p => p === page ? ' aria-current="page"' : '';
     w(`
   <aside class="sidebar" id="sidebar" aria-label="Main navigation">
-    <a class="brand" href="index.html" title="Home">
+    <a class="brand" href="index.html" title="Daily Report">
       <span class="logo" aria-hidden="true">V</span>
       <div><b>Versatilo <span class="ver" id="appVer"></span></b><small>Versatilo Tool</small></div>
     </a>
@@ -39,7 +35,7 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
       </a>`).join('\n')}
 
       <div class="nav-label">Preferences</div>
-      <button type="button" class="nav-item" id="navSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span><b>Settings</b><small>GitHub, Gemini &amp; Docs</small></span><span class="live" id="navDot" aria-label="Settings status">NULL</span></button>
+      <button type="button" class="nav-item" id="navSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span><b>Settings</b><small>GitHub, Gemini, Docs &amp; Drive</small></span><span class="live" id="navDot" aria-label="Settings status">NULL</span></button>
       <button type="button" class="nav-item" id="themeBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span><b>Theme</b><small id="themeLabel">System</small></span></button>
     </nav>
 
@@ -57,7 +53,7 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
     <div class="topbar">
       <button type="button" class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <div class="crumbs"><span>Versatilo Group</span><i aria-hidden="true">/</i><b id="crumbPage">${PAGES[page]}</b></div>
-      ${page === 'home' ? '' : '<div class="top-right"><span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span id="todayChip"></span></span></div>'}
+      <div class="top-right"><span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span id="todayChip"></span></span></div>
     </div>
 `);
   }
@@ -82,6 +78,11 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
       <div><label for="gdocUrl">Your work docs / sheets (Google Docs or Sheets links – one per line)</label><textarea id="gdocUrl" rows="3" autocomplete="off" spellcheck="false" placeholder="https://docs.google.com/document/d/…&#10;https://docs.google.com/spreadsheets/d/…"></textarea></div>
       <div class="hint">⬇ Fetch Google Doc signs in with Google once (read-only) and takes the part written on the Reporting Date – in a doc, under a date heading like 09/11/2026; in a sheet, the rows with that date in a Date column.</div>
     </div>
+    <div class="set-sec">
+      <h4><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.3 3h7.4l7 12-3.7 6.4H4.9L1.3 15zm.9 1.6L3.2 15l2.6 4.5L11.8 9zm6 0h-5.2l6.9 12h5.2zM7.6 19.8h11.6l-2.6-4.5H10.2z"/></svg>Google Drive</h4>
+      <label class="check"><input type="checkbox" id="drvAuto"> Save downloads to Google Drive</label>
+      <div class="hint">When on, Download PDF / Download DOCX also save the file in your own Google Drive (folder “Versatilo Daily Reports”, one file per Reporting Date). The History page lists them so you can download any earlier date. The app can only see the files it saved.</div>
+    </div>
   </div>
   <div class="set-foot"><span class="msg" id="setMsg">Saved only in this browser.</span><button type="button" class="primary" id="setSave">Save</button></div>
 </dialog>
@@ -89,20 +90,5 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
 `);
   }
 
-  /* Home page: one big card per tool */
-  function cards() {
-    w(`
-      <div class="home-grid">
-${TOOLS.map(t => `        <a class="home-card" href="${t.href}" style="--c:${t.color}">
-          <span class="hc-icon"><svg viewBox="0 0 24 24" aria-hidden="true">${t.svg}</svg></span>
-          <h3>${t.title}</h3>
-          <p>${t.desc}</p>
-          <ul class="hc-tags">${t.tags.map(x => `<li>${x}</li>`).join('')}</ul>
-          <span class="hc-go">Open ${t.title} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>`).join('\n')}
-      </div>
-`);
-  }
-
-  return { PAGES, TOOLS, sidebar, topbar, dialogs, cards };
+  return { PAGES, TOOLS, sidebar, topbar, dialogs };
 })();

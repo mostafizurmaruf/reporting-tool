@@ -180,5 +180,4 @@ document.addEventListener('input', e => {
 });
 document.addEventListener('change', onChange);
 $('addRow').onclick = () => { addRow(); onChange(); tbody.lastElementChild.querySelector('textarea').focus(); };
-$('printBtn').onclick = () => window.print();
 

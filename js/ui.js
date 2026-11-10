@@ -9,7 +9,7 @@
     b.textContent = live ? 'LIVE' : 'NULL';
   };
   // Inputs always show what is saved (unsaved edits are dropped when the dialog closes)
-  const load = () => { const g = ghStore.get(); $('ghUser').value = g.user || ''; $('ghToken').value = g.token || ''; $('aiKey').value = aiStore.get(); $('gdocUrl').value = gdocStore.get(); };
+  const load = () => { const g = ghStore.get(); $('ghUser').value = g.user || ''; $('ghToken').value = g.token || ''; $('aiKey').value = aiStore.get(); $('gdocUrl').value = gdocStore.get(); $('drvAuto').checked = driveStore.get(); };
   window.openSettings = () => { load(); $('setMsg').textContent = 'Saved only in this browser.'; dlg.showModal(); };
   $('setClose').onclick = () => dlg.close();
   dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
@@ -18,6 +18,7 @@
     ghStore.set({ user: $('ghUser').value.trim(), token: $('ghToken').value.trim() });
     aiKeyMem = $('aiKey').value.trim(); aiStore.set(aiKeyMem);
     gdocStore.set($('gdocUrl').value.trim());
+    driveStore.set($('drvAuto').checked);
     mark();
     $('status').textContent = 'Settings saved in this browser.';
     dlg.close();
