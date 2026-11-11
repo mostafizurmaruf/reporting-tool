@@ -6,6 +6,7 @@ Admin-panel style tool. The Daily Report opens first (`index.html`); the sidebar
 - **History** (`history.html`) – the report PDFs / DOCX files saved in your own Google Drive; download any earlier date
 - **Edit Document** (`editor.html`) – open a PDF or DOCX report you already made, edit its text in place (click to edit, find & replace) and download it again in the same format. Runs fully in the browser; PDF editing loads pdf.js + pdf-lib from cdnjs.
 - **Icon Generator** (`icons.html`) – logo + background (solid / gradient / transparent) + padding → ZIP with every Android launcher icon (mipmap mdpi–xxxhdpi, round, adaptive layers, Play Store 512) and an iOS `AppIcon.appiconset` (RGB PNGs + Contents.json). Offline.
+- **Image Converter** (`convert.html`) – convert images between PNG, JPG, WebP and AVIF (input: anything the browser opens – PNG/JPG/WebP/AVIF/GIF/BMP/SVG/ICO). Many files at once, quality slider, JPG background fill, optional resize; one file or a ZIP. Offline.
 
 Open `index.html` (the Daily Report) in a browser – no build step.
 
@@ -16,6 +17,7 @@ index.html            Daily Report page (opens first)
 history.html          History page – saved reports from Google Drive
 editor.html           Edit Document page
 icons.html            Icon Generator page
+convert.html          Image Converter page
 policy.html           Privacy Policy (incl. Google API Limited Use disclosure)
 service.html          Terms of Service
 favicon.svg           site icon (wrench)
@@ -26,6 +28,7 @@ css/
   report.css          Daily Report page
   editor.css          Edit Document page
   icons.css           Icon Generator page
+  convert.css         Image Converter page (uses icons.css layout)
   print.css           print styles
 js/                   (classic scripts – load order matters)
   version.js          APP_VERSION + asset loader (never cached)
@@ -45,6 +48,7 @@ js/                   (classic scripts – load order matters)
   ui.js               settings dialog, status toast
   doc-editor.js       open / edit / re-save PDF & DOCX      (Edit Document)
   icon-gen.js         launcher icon rendering + ZIP         (Icon Generator)
+  img-convert.js      PNG/JPG/WebP/AVIF conversion + ZIP    (Image Converter)
   shell.js            mobile menu, theme, version badge, user card
 ```
 

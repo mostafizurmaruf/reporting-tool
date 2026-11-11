@@ -4,7 +4,7 @@
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', policy: 'Privacy Policy', service: 'Terms of Service' };
+  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', policy: 'Privacy Policy', service: 'Terms of Service' };
   const w = html => document.write(html);
 
   /* Workspace tools – the sidebar links are built from this list */
@@ -17,6 +17,8 @@ const Layout = (() => {
       svg: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3v5h5v3"/><path d="M18.4 13.6a1.9 1.9 0 0 1 2.7 2.7L16 21.4l-3.4.7.7-3.4z"/>' },
     { page: 'icons', id: 'navIcons', href: 'icons.html', title: 'Icon Generator', sub: 'Android &amp; iOS app icons',
       svg: '<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/>' },
+    { page: 'convert', id: 'navConvert', href: 'convert.html', title: 'Image Converter', sub: 'PNG · JPG · WebP · AVIF',
+      svg: '<rect x="3" y="3" width="11" height="11" rx="2"/><path d="m3 11 3-3 4 4"/><path d="M17 7h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2"/><path d="m14 17 2 2 2-2"/>' },
   ];
 
   function sidebar(page) {

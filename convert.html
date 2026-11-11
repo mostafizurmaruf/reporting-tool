@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Converter · Versatilo Tool</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/icons.css', 'css/convert.css', 'css/print.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('convert');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('convert');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>IMAGE CONVERTER</h2>
+        <p>Convert images between PNG, JPG, WebP and AVIF – one file or many at once. Everything runs in your browser; nothing is uploaded.</p>
+      </header>
+
+      <div class="ic-grid">
+        <!-- ----- Controls ----- -->
+        <section class="card ic-ctrl">
+          <h3>1 · IMAGES</h3>
+          <label class="drop ic-drop" id="cvDrop" for="cvFile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <b>Drop images here, or click to choose</b>
+            <small>PNG, JPG, WebP, AVIF, GIF, BMP, SVG, ICO – several at once is fine. You can also paste with <kbd>Ctrl</kbd>+<kbd>V</kbd>.</small>
+          </label>
+          <input type="file" id="cvFile" accept="image/*,.svg,.ico,.avif,.bmp" multiple hidden>
+
+          <h3 class="ic-h">2 · CONVERT TO</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Format</span>
+            <div class="seg" id="cvFmt" role="group" aria-label="Output format">
+              <button type="button" data-v="png" aria-pressed="true">PNG</button><button type="button" data-v="jpeg" aria-pressed="false">JPG</button><button type="button" data-v="webp" aria-pressed="false">WebP</button><button type="button" data-v="avif" aria-pressed="false">AVIF</button>
+            </div>
+          </div>
+          <div class="ic-row" id="cvQRow">
+            <label class="ic-lbl" for="cvQ">Quality</label>
+            <input type="range" id="cvQ" min="10" max="100" value="90">
+            <output id="cvQOut" for="cvQ">90%</output>
+          </div>
+          <div class="ic-row" id="cvBgRow">
+            <label class="ic-lbl" for="cvBg">Fill transparency with</label>
+            <input type="color" id="cvBg" value="#ffffff" aria-label="Background colour for transparent areas">
+            <small class="cv-note">JPG has no transparency</small>
+          </div>
+
+          <h3 class="ic-h">3 · SIZE (OPTIONAL)</h3>
+          <div class="ic-row">
+            <label class="ic-lbl" for="cvScale">Scale</label>
+            <input type="range" id="cvScale" min="10" max="100" step="5" value="100">
+            <output id="cvScaleOut" for="cvScale">100%</output>
+          </div>
+          <div class="ic-row">
+            <label class="ic-lbl" for="cvMax">Max width / height</label>
+            <input type="number" id="cvMax" min="0" step="1" placeholder="no limit" class="cv-num">
+            <small class="cv-note">px · keeps the aspect ratio</small>
+          </div>
+          <div class="hint" id="cvNote"></div>
+        </section>
+
+        <!-- ----- Files ----- -->
+        <section class="card ic-prev">
+          <div class="cv-head"><h3>FILES</h3><button type="button" id="cvClear" hidden>Clear all</button></div>
+          <ul class="cv-list" id="cvList"></ul>
+          <div class="cv-empty" id="cvEmpty">No images yet.</div>
+        </section>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite" data-idle="Add images to start.">Add images to start.</span>
+      <button type="button" class="primary" id="cvSave" disabled>Download</button>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/ui.js',
+  'js/img-convert.js', 'js/shell.js',
+]);
+</script>
+</body>
+</html>

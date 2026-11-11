@@ -1,0 +1,29 @@
+/* =====================================================================
+   Image Converter page (reuses the .ic-* layout from icons.css)
+   ===================================================================== */
+.cv-note{font-size:12px;color:var(--muted)}
+.cv-num{width:120px}
+.ic-row input[type=color]{width:42px;height:34px;padding:2px;cursor:pointer}
+.ic-row[hidden]{display:none}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+
+.cv-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cv-head h3{margin:0}
+.cv-head button{padding:5px 10px;font-size:12.5px}
+.cv-head button[hidden]{display:none}
+
+.cv-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 260px);overflow:auto}
+.cv-list li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px}
+.cv-list img{width:52px;height:52px;object-fit:contain;border-radius:6px;background:repeating-conic-gradient(color-mix(in srgb,var(--line) 70%,transparent) 0 25%,transparent 0 50%) 0 0/12px 12px}
+.cv-info{min-width:0}
+.cv-info b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13.5px}
+.cv-info small{display:block;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.cv-info small .up{color:var(--danger,#dc2626)}
+.cv-info small .down{color:var(--ok,#16a34a)}
+.cv-info small.err{color:var(--danger,#dc2626)}
+.cv-act{display:flex;gap:6px}
+.cv-act button{padding:5px 9px;font-size:12.5px}
+.cv-act .x{padding:5px 8px;line-height:1}
+.cv-empty{padding:28px 8px;text-align:center;color:var(--muted);font-size:13px}
+.cv-empty[hidden]{display:none}
+@media (max-width:520px){.cv-list li{grid-template-columns:44px minmax(0,1fr)}.cv-list img{width:44px;height:44px}.cv-act{grid-column:1/-1;justify-content:flex-end}}
