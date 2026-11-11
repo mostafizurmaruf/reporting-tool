@@ -5,9 +5,9 @@
    Uses the same list markup + styles as the Image Converter page.
    ===================================================================== */
 (() => {
-  const SET_KEY = 'versatilo-resize-v1';
+  const SET_KEY = 'versatilo-resize-v2';   // v2: default fit = exact size + background
   const say = t => { $('status').textContent = t; };
-  const st = { mode: 'percent', pct: 50, w: 0, h: 0, preset: 0, fit: 'contain', bg: '#ffffff', transp: false, noUp: true, fmt: 'same', q: 90, kb: 0 };
+  const st = { mode: 'percent', pct: 50, w: 0, h: 0, preset: 0, lock: false, lockBy: 'w', fit: 'pad', bg: '#ffffff', bgMode: 'transparent', noUp: true, fmt: 'same', q: 90, kb: 0 };
   try { Object.assign(st, JSON.parse(localStorage.getItem(SET_KEY) || '{}')); } catch {}
   const save = () => { try { localStorage.setItem(SET_KEY, JSON.stringify(st)); } catch {} };
 
@@ -26,7 +26,7 @@
 
   /* ---------- Controls ---------- */
   const seg = (id, key) => $(id).querySelectorAll('button').forEach(b => { b.onclick = () => { st[key] = b.dataset.v; changed(); }; });
-  seg('rzMode', 'mode'); seg('rzFit', 'fit'); seg('rzFmt', 'fmt');
+  seg('rzMode', 'mode'); seg('rzFit', 'fit'); seg('rzFmt', 'fmt'); seg('rzBgMode', 'bgMode');
   const range = (id, key) => {
     const el = $(id), out = $(id + 'Out');
     el.value = st[key]; out.textContent = st[key] + '%';
@@ -34,34 +34,66 @@
   };
   range('rzPct', 'pct'); range('rzQ', 'q');
   const num = (id, key) => { $(id).value = st[key] || ''; $(id).oninput = e => { st[key] = Math.max(0, Math.round(+e.target.value || 0)); changed(); }; };
-  num('rzW', 'w'); num('rzH', 'h'); num('rzKb', 'kb');
+  num('rzKb', 'kb');
+  if (st.fit === 'contain') st.fit = 'pad';
+  /* Width × height: with the ratio lock on, typing one side fills in the other from the (first) image */
+  $('rzW').value = st.w || ''; $('rzH').value = st.h || '';
+  const side = (id, key) => { $(id).oninput = e => { st[key] = Math.max(0, Math.round(+e.target.value || 0)); st.lockBy = key; fillOther(); changed(); }; };
+  side('rzW', 'w'); side('rzH', 'h');
+  $('rzLock').onclick = () => { st.lock = !st.lock; if (!st[st.lockBy]) st.lockBy = st.lockBy === 'w' ? 'h' : 'w'; fillOther(); changed(); };
+  const ref = () => items[0]?.img;
+  const ratio = img => (img.naturalHeight || 1024) / (img.naturalWidth || 1024);   // h / w
+  function fillOther() {   // show the calculated side in its field (locked) or as a hint (unlocked, empty)
+    const img = ref();
+    $('rzW').placeholder = $('rzH').placeholder = 'auto';
+    if (!img) return;
+    const r = ratio(img);
+    if (st.lock) {
+      if (st.lockBy === 'w' && st.w) { st.h = Math.max(1, Math.round(st.w * r)); $('rzH').value = st.h; }
+      else if (st.lockBy === 'h' && st.h) { st.w = Math.max(1, Math.round(st.h / r)); $('rzW').value = st.w; }
+    } else if (st.w && !st.h) $('rzH').placeholder = 'auto · ' + Math.max(1, Math.round(st.w * r));
+    else if (st.h && !st.w) $('rzW').placeholder = 'auto · ' + Math.max(1, Math.round(st.h / r));
+  }
   $('rzPreset').innerHTML = PRESETS.map(([n, w, h], i) => `<option value="${i}">${n} – ${w}×${h}</option>`).join('');
   $('rzPreset').value = st.preset; $('rzPreset').onchange = e => { st.preset = +e.target.value; changed(); };
-  $('rzBg').value = st.bg; $('rzBg').oninput = e => { st.bg = e.target.value; changed(); };
-  $('rzTransp').checked = st.transp; $('rzTransp').onchange = e => { st.transp = e.target.checked; changed(); };
+  $('rzBg').value = st.bg; $('rzBg').oninput = e => { st.bg = e.target.value; st.bgMode = 'color'; changed(); };
+  $('rzSwatches').innerHTML = ['#ffffff', '#000000', '#f3f4f6', '#2563eb', '#16a34a', '#dc2626', '#f59e0b', '#7c3aed']
+    .map(c => `<button type="button" style="background:${c}" data-c="${c}" aria-label="${c}"></button>`).join('');
+  $('rzSwatches').onclick = e => { const b = e.target.closest('[data-c]'); if (!b) return; st.bg = $('rzBg').value = b.dataset.c; st.bgMode = 'color'; changed(); };
   $('rzNoUp').checked = st.noUp; $('rzNoUp').onchange = e => { st.noUp = e.target.checked; changed(); };
 
   function box() {   // target [W, H] for px / preset (0 = auto)
     if (st.mode === 'preset') { const p = PRESETS[st.preset] || PRESETS[0]; return [p[1], p[2]]; }
+    if (st.lock) return st.lockBy === 'w' ? [st.w, 0] : [0, st.h];   // the typed side only – each image keeps its own ratio
     return [st.w, st.h];
   }
   function syncUi() {
-    for (const [id, key] of [['rzMode', 'mode'], ['rzFit', 'fit'], ['rzFmt', 'fmt']])
+    for (const [id, key] of [['rzMode', 'mode'], ['rzFit', 'fit'], ['rzFmt', 'fmt'], ['rzBgMode', 'bgMode']])
       $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === st[key]));
     document.querySelectorAll('[data-mode]').forEach(r => { r.hidden = !r.dataset.mode.split(' ').includes(st.mode); });
     const [W, H] = box(), both = W && H;
-    $('rzFit').querySelectorAll('button').forEach(b => { b.disabled = !both && b.dataset.v !== 'contain'; });
+    $('rzLock').setAttribute('aria-pressed', st.lock);
+    if (st.mode === 'px' && !both) $('rzFitRow').hidden = true;   // only one side → ratio is kept, nothing to fit
     const fit = both ? st.fit : 'contain';
     const padding = st.mode !== 'percent' && fit === 'pad';
     const anyJpg = st.fmt === 'jpeg' || (st.fmt === 'same' && items.some(i => outFmt(i) === 'jpeg'));
-    $('rzPadRow').hidden = !padding && !anyJpg;
-    $('rzTransp').parentElement.hidden = !padding;
+    const allJpg = st.fmt === 'jpeg' || (st.fmt === 'same' && items.length && items.every(i => outFmt(i) === 'jpeg'));
+    $('rzBgMode').querySelector('[data-v=transparent]').disabled = allJpg;
+    const bgColor = st.bgMode === 'color' || allJpg;
+    $('rzBgPick').hidden = !bgColor;
+    $('rzBgNote').textContent = allJpg ? 'JPG cannot be transparent – the background colour is used. Choose PNG or WebP for transparency.'
+      : (anyJpg && st.bgMode === 'transparent' ? 'JPG files get the colour (white by default); PNG / WebP stay transparent. ' : '')
+      + (padding ? 'The empty sides around the image get this background.' : 'Transparent parts of the image get this background.');
     const anyLossy = st.fmt === 'same' ? items.some(i => LOSSY.has(outFmt(i))) || !items.length : LOSSY.has(st.fmt);
     $('rzQRow').hidden = $('rzKbRow').hidden = !anyLossy;
     $('cvNote').textContent = st.mode === 'percent' ? `Every image becomes ${st.pct}% of its own size.`
       : !W && !H ? 'Enter a width, a height, or both.'
-      : !both ? `${W ? 'Width ' + W : 'Height ' + H} px – the other side follows the image’s ratio.`
-      : { contain: `Fits inside ${W}×${H} – nothing is cut off, the ratio is kept (one side may be smaller).`,
+      : !both ? (() => {
+          const img = ref(), o = img && (W ? Math.round(W * ratio(img)) : Math.round(H / ratio(img)));
+          const size = W ? `${W} × ${o || 'auto'}` : `${o || 'auto'} × ${H}`;
+          return `Ratio kept → ${size} px` + (img ? (items.length > 1 ? ` for ${items[0].file.name || 'the first image'}; other images keep their own ratio (see the list).` : '.') : ' – add an image to see the other side.');
+        })()
+      : {
           cover: `Exactly ${W}×${H} – fills the frame and crops the edges from the centre.`,
           pad: `Exactly ${W}×${H} – the whole image is kept and the empty sides are filled with the pad colour.`,
           stretch: `Exactly ${W}×${H} – the image is stretched, so it may look squashed.` }[fit];
@@ -90,8 +122,7 @@
     if (fit === 'stretch') return { cw: W, ch: H, ...full, dx: 0, dy: 0, dw: W, dh: H };
     if (fit === 'cover') {   // crop the source to the target ratio, centred
       const r = W / H, sw = Math.min(iw, ih * r), sh = sw / r;
-      let cw = W, ch = H;
-      if (st.noUp && sw < W) { cw = R(sw); ch = R(sh); }   // don't blow up a small image: keep the crop at source size
+      const cw = W, ch = H;   // exact sizes are always exact, even for a small image
       return { cw, ch, sx: (iw - sw) / 2, sy: (ih - sh) / 2, sw, sh, dx: 0, dy: 0, dw: cw, dh: ch };
     }
     // pad: the frame is always W×H; the image fits inside it
@@ -121,8 +152,7 @@
 
   async function resize(it) {
     const fmt = outFmt(it), { c, x, p, src, s } = render(it.img);
-    const transparent = fmt !== 'jpeg' && (p.pad ? st.transp : true);
-    if (!transparent) { x.fillStyle = st.bg; x.fillRect(0, 0, c.width, c.height); }
+    if (fmt === 'jpeg' || st.bgMode === 'color') { x.fillStyle = st.bg; x.fillRect(0, 0, c.width, c.height); }
     x.drawImage(src, ...s, p.dx, p.dy, p.dw, p.dh);
     let q = st.q / 100, blob = await toBlob(c, fmt, q), note = '';
     if (!blob) throw new Error('Could not save this image');
@@ -157,6 +187,7 @@
       try { await img.decode(); } catch { URL.revokeObjectURL(url); bad++; continue; }
       items.push({ id: ++seq, file, name: (file.name || 'pasted-image').replace(/\.[^.]+$/, '') || 'image', img, url, out: null, err: '' });
     }
+    fillOther();
     renderList();
     if (bad) say(`${bad} file${bad > 1 ? 's' : ''} could not be opened (HEIC / RAW photos are not supported by browsers).`);
     resizeAll();
@@ -208,7 +239,7 @@
     if (dl) { const it = items.find(i => i.id === +dl.dataset.dl); if (it?.out) download(it.out.blob, fileName(it)); }
     if (rm) {
       const i = items.findIndex(x => x.id === +rm.dataset.rm);
-      if (i >= 0) { URL.revokeObjectURL(items[i].url); items.splice(i, 1); renderList(); }
+      if (i >= 0) { URL.revokeObjectURL(items[i].url); items.splice(i, 1); fillOther(); renderList(); }
     }
   };
   $('cvClear').onclick = () => { run++; items.forEach(i => URL.revokeObjectURL(i.url)); items = []; renderList(); };

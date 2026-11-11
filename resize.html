@@ -59,23 +59,32 @@
             <span class="ic-lbl">Width × height</span>
             <div class="rz-wh">
               <input type="number" id="rzW" min="1" step="1" placeholder="auto" class="cv-num" aria-label="Width in pixels">
-              <span aria-hidden="true">×</span>
+              <button type="button" id="rzLock" class="rz-lock" aria-pressed="false" title="Keep aspect ratio – the other side is calculated">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+                <span>Keep ratio</span>
+              </button>
               <input type="number" id="rzH" min="1" step="1" placeholder="auto" class="cv-num" aria-label="Height in pixels">
               <small class="cv-note">px</small>
             </div>
           </div>
-          <div class="ic-row" data-mode="px preset">
+          <div class="ic-row" data-mode="px preset" id="rzFitRow">
             <span class="ic-lbl">Fit</span>
             <div class="seg" id="rzFit" role="group" aria-label="How to fit the new size">
-              <button type="button" data-v="contain" aria-pressed="true">Keep ratio</button><button type="button" data-v="cover" aria-pressed="false">Crop</button><button type="button" data-v="pad" aria-pressed="false">Pad</button><button type="button" data-v="stretch" aria-pressed="false">Stretch</button>
+              <button type="button" data-v="pad" aria-pressed="true">Fit + background</button><button type="button" data-v="cover" aria-pressed="false">Crop to fill</button><button type="button" data-v="stretch" aria-pressed="false">Stretch</button>
             </div>
           </div>
-          <div class="ic-row" id="rzPadRow">
-            <label class="ic-lbl" for="rzBg">Pad / fill colour</label>
-            <input type="color" id="rzBg" value="#ffffff" aria-label="Pad and background colour">
-            <label class="ic-check rz-inline"><input type="checkbox" id="rzTransp"> Transparent (PNG / WebP)</label>
+          <div class="ic-row" id="rzBgRow">
+            <span class="ic-lbl">Background</span>
+            <div class="seg" id="rzBgMode" role="group" aria-label="Background">
+              <button type="button" data-v="transparent" aria-pressed="true">Transparent</button><button type="button" data-v="color" aria-pressed="false">Colour</button>
+            </div>
+            <div class="ic-colors" id="rzBgPick">
+              <input type="color" id="rzBg" value="#ffffff" aria-label="Background colour">
+              <div class="ic-sw" id="rzSwatches" aria-label="Preset colours"></div>
+            </div>
           </div>
-          <label class="ic-check"><input type="checkbox" id="rzNoUp" checked> Don’t enlarge images that are already smaller</label>
+          <div class="hint rz-bgnote" id="rzBgNote"></div>
+          <label class="ic-check"><input type="checkbox" id="rzNoUp" checked> Don’t enlarge images that are already smaller <small class="cv-note">(with Fit + background the size stays exact; a small image is centred instead of blown up)</small></label>
 
           <h3 class="ic-h">3 · OUTPUT</h3>
           <div class="ic-row">

@@ -32,6 +32,13 @@
 .rz-sel{flex:1;min-width:200px;max-width:100%}
 .rz-wh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .rz-wh .cv-num{width:100px}
-.ic-check.rz-inline{margin:0}
+.ic-colors[hidden]{display:none}
+.rz-bgnote{margin-top:6px}
 .ic-check[hidden]{display:none}
 .cv-info small b{display:inline;font-size:inherit;color:var(--ink)}
+.rz-lock{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;font-size:12.5px}
+.rz-lock svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rz-lock[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.rz-wh .cv-num{width:110px}
+.ic-check:has(> small){flex-wrap:wrap}
+.ic-check > small.cv-note{flex-basis:100%;margin-left:24px;font-weight:400}
