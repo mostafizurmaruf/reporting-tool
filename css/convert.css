@@ -27,3 +27,11 @@
 .cv-empty{padding:28px 8px;text-align:center;color:var(--muted);font-size:13px}
 .cv-empty[hidden]{display:none}
 @media (max-width:520px){.cv-list li{grid-template-columns:44px minmax(0,1fr)}.cv-list img{width:44px;height:44px}.cv-act{grid-column:1/-1;justify-content:flex-end}}
+
+/* Image Resizer extras */
+.rz-sel{flex:1;min-width:200px;max-width:100%}
+.rz-wh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rz-wh .cv-num{width:100px}
+.ic-check.rz-inline{margin:0}
+.ic-check[hidden]{display:none}
+.cv-info small b{display:inline;font-size:inherit;color:var(--ink)}

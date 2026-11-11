@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Resizer · Versatilo Tool</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/icons.css', 'css/convert.css', 'css/print.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('resize');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('resize');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>IMAGE RESIZER</h2>
+        <p>Resize images by percentage, exact pixels or a preset size – crop, fit or pad – and shrink them under a file-size limit. Runs in your browser; nothing is uploaded.</p>
+      </header>
+
+      <div class="ic-grid">
+        <!-- ----- Controls ----- -->
+        <section class="card ic-ctrl">
+          <h3>1 · IMAGES</h3>
+          <label class="drop ic-drop" id="cvDrop" for="cvFile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <b>Drop images here, or click to choose</b>
+            <small>PNG, JPG, WebP, AVIF, GIF, BMP, SVG – several at once is fine. You can also paste with <kbd>Ctrl</kbd>+<kbd>V</kbd>.</small>
+          </label>
+          <input type="file" id="cvFile" accept="image/*,.svg,.ico,.avif,.bmp" multiple hidden>
+
+          <h3 class="ic-h">2 · NEW SIZE</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Resize by</span>
+            <div class="seg" id="rzMode" role="group" aria-label="Resize by">
+              <button type="button" data-v="percent" aria-pressed="true">Percentage</button><button type="button" data-v="px" aria-pressed="false">Pixels</button><button type="button" data-v="preset" aria-pressed="false">Preset</button>
+            </div>
+          </div>
+          <div class="ic-row" data-mode="percent">
+            <label class="ic-lbl" for="rzPct">Scale</label>
+            <input type="range" id="rzPct" min="5" max="200" step="5" value="50">
+            <output id="rzPctOut" for="rzPct">50%</output>
+          </div>
+          <div class="ic-row" data-mode="preset">
+            <label class="ic-lbl" for="rzPreset">Preset</label>
+            <select id="rzPreset" class="rz-sel"></select>
+          </div>
+          <div class="ic-row" data-mode="px">
+            <span class="ic-lbl">Width × height</span>
+            <div class="rz-wh">
+              <input type="number" id="rzW" min="1" step="1" placeholder="auto" class="cv-num" aria-label="Width in pixels">
+              <span aria-hidden="true">×</span>
+              <input type="number" id="rzH" min="1" step="1" placeholder="auto" class="cv-num" aria-label="Height in pixels">
+              <small class="cv-note">px</small>
+            </div>
+          </div>
+          <div class="ic-row" data-mode="px preset">
+            <span class="ic-lbl">Fit</span>
+            <div class="seg" id="rzFit" role="group" aria-label="How to fit the new size">
+              <button type="button" data-v="contain" aria-pressed="true">Keep ratio</button><button type="button" data-v="cover" aria-pressed="false">Crop</button><button type="button" data-v="pad" aria-pressed="false">Pad</button><button type="button" data-v="stretch" aria-pressed="false">Stretch</button>
+            </div>
+          </div>
+          <div class="ic-row" id="rzPadRow">
+            <label class="ic-lbl" for="rzBg">Pad / fill colour</label>
+            <input type="color" id="rzBg" value="#ffffff" aria-label="Pad and background colour">
+            <label class="ic-check rz-inline"><input type="checkbox" id="rzTransp"> Transparent (PNG / WebP)</label>
+          </div>
+          <label class="ic-check"><input type="checkbox" id="rzNoUp" checked> Don’t enlarge images that are already smaller</label>
+
+          <h3 class="ic-h">3 · OUTPUT</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Format</span>
+            <div class="seg" id="rzFmt" role="group" aria-label="Output format">
+              <button type="button" data-v="same" aria-pressed="true">Same</button><button type="button" data-v="png" aria-pressed="false">PNG</button><button type="button" data-v="jpeg" aria-pressed="false">JPG</button><button type="button" data-v="webp" aria-pressed="false">WebP</button>
+            </div>
+          </div>
+          <div class="ic-row" id="rzQRow">
+            <label class="ic-lbl" for="rzQ">Quality</label>
+            <input type="range" id="rzQ" min="10" max="100" value="90">
+            <output id="rzQOut" for="rzQ">90%</output>
+          </div>
+          <div class="ic-row" id="rzKbRow">
+            <label class="ic-lbl" for="rzKb">Max file size</label>
+            <input type="number" id="rzKb" min="1" step="1" placeholder="no limit" class="cv-num">
+            <small class="cv-note">KB · lowers JPG / WebP quality until it fits</small>
+          </div>
+          <div class="hint" id="cvNote"></div>
+        </section>
+
+        <!-- ----- Files ----- -->
+        <section class="card ic-prev">
+          <div class="cv-head"><h3>FILES</h3><button type="button" id="cvClear" hidden>Clear all</button></div>
+          <ul class="cv-list" id="cvList"></ul>
+          <div class="cv-empty" id="cvEmpty">No images yet.</div>
+        </section>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite" data-idle="Add images to start.">Add images to start.</span>
+      <button type="button" class="primary" id="cvSave" disabled>Download</button>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/ui.js',
+  'js/img-resize.js', 'js/shell.js',
+]);
+</script>
+</body>
+</html>
