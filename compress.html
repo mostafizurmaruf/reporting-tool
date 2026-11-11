@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image Compressor · Versatilo Tool</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/icons.css', 'css/convert.css', 'css/print.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('compress');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('compress');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>IMAGE COMPRESSOR</h2>
+        <p>Make JPG, PNG, WebP and AVIF files smaller – pick a quality or a target file size. The pixel size stays the same unless you ask otherwise. Runs in your browser; nothing is uploaded.</p>
+      </header>
+
+      <div class="ic-grid">
+        <!-- ----- Controls ----- -->
+        <section class="card ic-ctrl">
+          <h3>1 · IMAGES</h3>
+          <label class="drop ic-drop" id="cvDrop" for="cvFile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <b>Drop images here, or click to choose</b>
+            <small>PNG, JPG, WebP, AVIF, GIF, BMP, SVG – several at once is fine. You can also paste with <kbd>Ctrl</kbd>+<kbd>V</kbd>.</small>
+          </label>
+          <input type="file" id="cvFile" accept="image/*,.svg,.ico,.avif,.bmp" multiple hidden>
+
+          <h3 class="ic-h">2 · COMPRESS BY</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Mode</span>
+            <div class="seg" id="cpBy" role="group" aria-label="Compress by">
+              <button type="button" data-v="quality" aria-pressed="true">Quality</button><button type="button" data-v="size" aria-pressed="false">Target size</button>
+            </div>
+          </div>
+          <div class="ic-row" data-by="quality">
+            <label class="ic-lbl" for="cpQ">Quality</label>
+            <input type="range" id="cpQ" min="10" max="100" step="1" value="75">
+            <output id="cpQOut" for="cpQ">75%</output>
+            <div class="ic-sw vc-chips" id="cpQChips">
+              <button type="button" data-q="85">Light</button><button type="button" data-q="75">Balanced</button><button type="button" data-q="55">Strong</button><button type="button" data-q="35">Smallest</button>
+            </div>
+          </div>
+          <div class="ic-row" data-by="size">
+            <label class="ic-lbl" for="cpKb">Max file size</label>
+            <div class="rz-wh">
+              <input type="number" id="cpKb" min="1" step="1" value="200" class="cv-num" aria-label="Target size in KB">
+              <small class="cv-note">KB per image</small>
+            </div>
+            <div class="ic-sw vc-chips" id="cpKbChips">
+              <button type="button" data-kb="50">50</button><button type="button" data-kb="100">100</button><button type="button" data-kb="200">200</button><button type="button" data-kb="500">500</button><button type="button" data-kb="1024">1 MB</button>
+            </div>
+          </div>
+          <div class="ic-row">
+            <label class="ic-lbl" for="cpMax">Longest side</label>
+            <input type="number" id="cpMax" min="0" step="1" placeholder="no change" class="cv-num">
+            <small class="cv-note">px · optional, never enlarges</small>
+          </div>
+
+          <h3 class="ic-h">3 · OUTPUT</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Format</span>
+            <div class="seg" id="cpFmt" role="group" aria-label="Output format">
+              <button type="button" data-v="same" aria-pressed="true">Same</button><button type="button" data-v="jpeg" aria-pressed="false">JPG</button><button type="button" data-v="webp" aria-pressed="false">WebP</button><button type="button" data-v="avif" aria-pressed="false">AVIF</button>
+            </div>
+          </div>
+          <div class="hint" id="cvNote"></div>
+        </section>
+
+        <!-- ----- Files ----- -->
+        <section class="card ic-prev">
+          <div class="cv-head"><h3>FILES</h3><button type="button" id="cvClear" hidden>Clear all</button></div>
+          <ul class="cv-list" id="cvList"></ul>
+          <div class="cv-empty" id="cvEmpty">No images yet.</div>
+        </section>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite" data-idle="Add images to start.">Add images to start.</span>
+      <button type="button" class="primary" id="cvSave" disabled>Download</button>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/ui.js',
+  'js/img-compress.js', 'js/shell.js',
+]);
+</script>
+</body>
+</html>
