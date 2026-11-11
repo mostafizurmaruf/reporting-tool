@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video Compressor · Versatilo Tool</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/icons.css', 'css/convert.css', 'css/print.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('video');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('video');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>VIDEO COMPRESSOR</h2>
+        <p>Make videos smaller – pick a quality or a target size (e.g. under 16 MB for WhatsApp), lower the resolution or mute the sound. Uses your device’s video encoder; the video never leaves your browser.</p>
+      </header>
+
+      <div class="ic-grid">
+        <!-- ----- Controls ----- -->
+        <section class="card ic-ctrl">
+          <h3>1 · VIDEOS</h3>
+          <label class="drop ic-drop" id="cvDrop" for="cvFile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <b>Drop videos here, or click to choose</b>
+            <small>MP4, MOV, WebM, MKV – several at once is fine.</small>
+          </label>
+          <input type="file" id="cvFile" accept="video/*,.mkv,.mov" multiple hidden>
+          <div class="hint vc-warn" id="vcSupport" hidden></div>
+
+          <h3 class="ic-h">2 · COMPRESS BY</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Method</span>
+            <div class="seg" id="vcBy" role="group" aria-label="Compress by">
+              <button type="button" data-v="quality" aria-pressed="true">Quality</button><button type="button" data-v="size" aria-pressed="false">Target size</button>
+            </div>
+          </div>
+          <div class="ic-row" data-by="quality">
+            <span class="ic-lbl">Quality</span>
+            <div class="seg" id="vcQ" role="group" aria-label="Quality">
+              <button type="button" data-v="high" aria-pressed="false">High</button><button type="button" data-v="medium" aria-pressed="true">Medium</button><button type="button" data-v="low" aria-pressed="false">Small</button><button type="button" data-v="very-low" aria-pressed="false">Smallest</button>
+            </div>
+          </div>
+          <div class="ic-row" data-by="size">
+            <label class="ic-lbl" for="vcMb">Max size</label>
+            <div class="rz-wh">
+              <input type="number" id="vcMb" min="1" step="1" value="16" class="cv-num" aria-label="Target size in MB">
+              <small class="cv-note">MB</small>
+            </div>
+            <div class="ic-sw vc-chips" id="vcMbChips">
+              <button type="button" data-mb="8">8 · Discord</button><button type="button" data-mb="16">16 · WhatsApp</button><button type="button" data-mb="25">25 · Email</button><button type="button" data-mb="50">50</button>
+            </div>
+          </div>
+
+          <h3 class="ic-h">3 · VIDEO &amp; SOUND</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Resolution</span>
+            <div class="seg" id="vcRes" role="group" aria-label="Resolution">
+              <button type="button" data-v="0" aria-pressed="true">Original</button><button type="button" data-v="1080" aria-pressed="false">1080p</button><button type="button" data-v="720" aria-pressed="false">720p</button><button type="button" data-v="480" aria-pressed="false">480p</button><button type="button" data-v="360" aria-pressed="false">360p</button>
+            </div>
+          </div>
+          <div class="ic-row">
+            <span class="ic-lbl">Frame rate</span>
+            <div class="seg" id="vcFps" role="group" aria-label="Frame rate">
+              <button type="button" data-v="0" aria-pressed="true">Original</button><button type="button" data-v="30" aria-pressed="false">30 fps</button><button type="button" data-v="24" aria-pressed="false">24 fps</button>
+            </div>
+          </div>
+          <div class="ic-row">
+            <span class="ic-lbl">Sound</span>
+            <div class="seg" id="vcAudio" role="group" aria-label="Sound">
+              <button type="button" data-v="keep" aria-pressed="true">Keep</button><button type="button" data-v="mute" aria-pressed="false">Remove</button>
+            </div>
+          </div>
+          <div class="ic-row">
+            <span class="ic-lbl">Format</span>
+            <div class="seg" id="vcFmt" role="group" aria-label="Output format">
+              <button type="button" data-v="mp4" aria-pressed="true">MP4</button><button type="button" data-v="webm" aria-pressed="false">WebM</button>
+            </div>
+          </div>
+          <div class="hint" id="cvNote"></div>
+        </section>
+
+        <!-- ----- Files ----- -->
+        <section class="card ic-prev">
+          <div class="cv-head"><h3>FILES</h3><button type="button" id="cvClear" hidden>Clear all</button></div>
+          <ul class="cv-list vc-list" id="cvList"></ul>
+          <div class="cv-empty" id="cvEmpty">No videos yet.</div>
+        </section>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite" data-idle="Add videos to start.">Add videos to start.</span>
+      <button type="button" id="vcSaveAll" hidden>Download all</button>
+      <button type="button" class="primary" id="vcGo" disabled>Compress</button>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/ui.js',
+  'js/video-compress.js', 'js/shell.js',
+]);
+</script>
+</body>
+</html>

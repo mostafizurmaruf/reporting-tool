@@ -8,6 +8,7 @@ Admin-panel style tool. The Daily Report opens first (`index.html`); the sidebar
 - **Icon Generator** (`icons.html`) – logo + background (solid / gradient / transparent) + padding → ZIP with every Android launcher icon (mipmap mdpi–xxxhdpi, round, adaptive layers, Play Store 512) and an iOS `AppIcon.appiconset` (RGB PNGs + Contents.json). Offline.
 - **Image Converter** (`convert.html`) – convert images between PNG, JPG, WebP and AVIF (input: anything the browser opens – PNG/JPG/WebP/AVIF/GIF/BMP/SVG/ICO). Many files at once, quality slider, JPG background fill, optional resize; one file or a ZIP. Offline.
 - **Image Resizer** (`resize.html`) – resize by percentage, exact pixels or presets (Full HD, Instagram, YouTube, passport …) with keep-ratio / crop / pad / stretch, don’t-enlarge option, output format, and a max file size in KB (lowers JPG / WebP quality until it fits). Offline.
+- **Video Compressor** (`video.html`) – re-encode MP4 / MOV / WebM / MKV to a smaller MP4 (H.264 + AAC) or WebM (VP9 + Opus): quality preset or target size in MB (8 / 16 / 25 …), resolution 1080p–360p, frame rate, remove sound; progress + cancel. Uses the browser’s WebCodecs encoder via Mediabunny (loaded from jsdelivr on first use); the video never leaves the browser.
 
 Open `index.html` (the Daily Report) in a browser – no build step.
 
@@ -20,6 +21,7 @@ editor.html           Edit Document page
 icons.html            Icon Generator page
 convert.html          Image Converter page
 resize.html           Image Resizer page
+video.html            Video Compressor page
 policy.html           Privacy Policy (incl. Google API Limited Use disclosure)
 service.html          Terms of Service
 favicon.svg           site icon (wrench)
@@ -30,7 +32,7 @@ css/
   report.css          Daily Report page
   editor.css          Edit Document page
   icons.css           Icon Generator page
-  convert.css         Image Converter + Resizer pages (uses icons.css layout)
+  convert.css         Image Converter, Resizer + Video Compressor pages (uses icons.css layout)
   print.css           print styles
 js/                   (classic scripts – load order matters)
   version.js          APP_VERSION + asset loader (never cached)
@@ -52,6 +54,7 @@ js/                   (classic scripts – load order matters)
   icon-gen.js         launcher icon rendering + ZIP         (Icon Generator)
   img-convert.js      PNG/JPG/WebP/AVIF conversion + ZIP    (Image Converter)
   img-resize.js       resize / crop / pad + KB limit + ZIP  (Image Resizer)
+  video-compress.js   WebCodecs re-encode via Mediabunny    (Video Compressor)
   shell.js            mobile menu, theme, version badge, user card
 ```
 

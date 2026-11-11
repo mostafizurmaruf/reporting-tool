@@ -4,7 +4,7 @@
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', policy: 'Privacy Policy', service: 'Terms of Service' };
+  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', video: 'Video Compressor', policy: 'Privacy Policy', service: 'Terms of Service' };
   const w = html => document.write(html);
 
   /* Workspace tools – the sidebar links are built from this list */
@@ -21,6 +21,8 @@ const Layout = (() => {
       svg: '<rect x="3" y="3" width="11" height="11" rx="2"/><path d="m3 11 3-3 4 4"/><path d="M17 7h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2"/><path d="m14 17 2 2 2-2"/>' },
     { page: 'resize', id: 'navResize', href: 'resize.html', title: 'Image Resizer', sub: 'Pixels · % · presets · KB',
       svg: '<path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/>' },
+    { page: 'video', id: 'navVideo', href: 'video.html', title: 'Video Compressor', sub: 'Smaller MP4 / WebM',
+      svg: '<rect x="2" y="5" width="14" height="14" rx="2"/><path d="m16 10 6-3v10l-6-3"/><path d="M6 12h6M9 9l-3 3 3 3"/>' },
   ];
 
   function sidebar(page) {

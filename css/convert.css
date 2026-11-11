@@ -42,3 +42,16 @@
 .rz-wh .cv-num{width:110px}
 .ic-check:has(> small){flex-wrap:wrap}
 .ic-check > small.cv-note{flex-basis:100%;margin-left:24px;font-weight:400}
+
+/* Video Compressor */
+.vc-list li{grid-template-columns:84px minmax(0,1fr) auto}
+.vc-list video{width:84px;height:52px;object-fit:cover;border-radius:6px;background:#000;pointer-events:none}
+.vc-bar{height:6px;margin-top:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.vc-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.cv-info small.vc-pct{margin-top:2px}
+.vc-chips{margin-left:auto}
+.vc-chips button{width:auto;height:auto;padding:4px 9px;border-radius:99px;font-size:12px;border:1px solid var(--line);box-shadow:none;background:var(--card);color:var(--ink)}
+.vc-chips button[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.vc-warn{color:var(--danger)}
+.vc-warn[hidden],[data-by][hidden]{display:none}
+@media (max-width:520px){.vc-list li{grid-template-columns:64px minmax(0,1fr)}.vc-list video{width:64px;height:44px}.vc-chips{margin-left:0}}
