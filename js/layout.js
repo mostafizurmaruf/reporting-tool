@@ -68,7 +68,7 @@ ${TOOLS.map(t => `      <a class="nav-item" href="${t.href}" id="${t.id}"${cur(t
     w(`
     <div class="topbar">
       <button type="button" class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-      <div class="crumbs"><span>Versatilo Group</span><i aria-hidden="true">/</i><b id="crumbPage">${PAGES[page]}</b></div>
+      <div class="crumbs"><span>Versatilo Tool</span><i aria-hidden="true">/</i><b id="crumbPage">${PAGES[page]}</b></div>
       <div class="top-right"><span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span id="todayChip"></span></span></div>
     </div>
 `);
