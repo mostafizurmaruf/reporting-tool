@@ -55,3 +55,9 @@
 .vc-warn{color:var(--danger)}
 .vc-warn[hidden],[data-by][hidden]{display:none}
 @media (max-width:520px){.vc-list li{grid-template-columns:64px minmax(0,1fr)}.vc-list video{width:64px;height:44px}.vc-chips{margin-left:0}}
+
+/* Image to Text */
+.oc-list li{align-items:start}
+.oc-list li > img,.oc-list .cv-act{align-self:center}
+.oc-text{grid-column:1/-1;min-height:110px;font-size:13.5px;line-height:1.55;white-space:pre-wrap}
+.oc-text[hidden],[data-eng][hidden]{display:none}

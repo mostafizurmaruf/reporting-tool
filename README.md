@@ -10,6 +10,7 @@ Admin-panel style tool. The Daily Report opens first (`index.html`); the sidebar
 - **Image Resizer** (`resize.html`) – resize by percentage, exact pixels or presets (Full HD, Instagram, YouTube, passport …) with keep-ratio / crop / pad / stretch, don’t-enlarge option, output format, and a max file size in KB (lowers JPG / WebP quality until it fits). Offline.
 - **Image Compressor** (`compress.html`) – make JPG / PNG / WebP / AVIF files smaller at the same pixel size: quality slider (Light / Balanced / Strong / Smallest) or a target size in KB per image (best quality that fits, scales down only if needed), optional longest-side limit, output format. PNGs are reduced to a colour palette (indexed PNG, transparency kept); the original is kept when it would not get smaller. Offline.
 - **Video Compressor** (`video.html`) – re-encode MP4 / MOV / WebM / MKV to a smaller MP4 (H.264 + AAC) or WebM (VP9 + Opus): quality preset or target size in MB (8 / 16 / 25 …), resolution 1080p–360p, frame rate, remove sound; progress + cancel. Uses the browser’s WebCodecs encoder via Mediabunny (loaded from jsdelivr on first use); the video never leaves the browser.
+- **Image to Text** (`ocr.html`) – OCR for screenshots, photos and scans: drop, choose or paste (Ctrl+V) images; English, Bangla or both. Offline engine = Tesseract.js (script + language data from jsdelivr on first use, image stays in the browser); optional Gemini AI engine with your own key for photos / handwriting. Editable result, keep lines or join paragraphs, copy or download .txt.
 
 Open `index.html` (the Daily Report) in a browser – no build step.
 
@@ -24,6 +25,7 @@ convert.html          Image Converter page
 resize.html           Image Resizer page
 compress.html         Image Compressor page
 video.html            Video Compressor page
+ocr.html              Image to Text (OCR) page
 policy.html           Privacy Policy (incl. Google API Limited Use disclosure)
 service.html          Terms of Service
 favicon.svg           site icon (wrench)
@@ -34,7 +36,11 @@ css/
   report.css          Daily Report page
   editor.css          Edit Document page
   icons.css           Icon Generator page
+<<<<<<< HEAD
   convert.css         Image Converter, Resizer, Compressor + Video Compressor pages (uses icons.css layout)
+=======
+  convert.css         Image Converter, Resizer, Video Compressor + Image to Text pages (uses icons.css layout)
+>>>>>>> 1507402 (feat: add Image to Text (OCR) functionality with UI and backend support)
   print.css           print styles
 js/                   (classic scripts – load order matters)
   version.js          APP_VERSION + asset loader (never cached)
@@ -58,6 +64,7 @@ js/                   (classic scripts – load order matters)
   img-resize.js       resize / crop / pad + KB limit + ZIP  (Image Resizer)
   img-compress.js     quality / KB target + palette PNG + ZIP (Image Compressor)
   video-compress.js   WebCodecs re-encode via Mediabunny    (Video Compressor)
+  img-ocr.js          OCR via Tesseract.js or Gemini       (Image to Text)
   shell.js            mobile menu, theme, version badge, user card
 ```
 

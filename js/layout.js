@@ -4,7 +4,11 @@
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
+<<<<<<< HEAD
   const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', compress: 'Image Compressor', video: 'Video Compressor', policy: 'Privacy Policy', service: 'Terms of Service' };
+=======
+  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', video: 'Video Compressor', ocr: 'Image to Text', policy: 'Privacy Policy', service: 'Terms of Service' };
+>>>>>>> 1507402 (feat: add Image to Text (OCR) functionality with UI and backend support)
   const w = html => document.write(html);
 
   /* Workspace tools – the sidebar links are built from this list */
@@ -25,6 +29,8 @@ const Layout = (() => {
       svg: '<path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="m14 10 7-7"/><path d="m3 21 7-7"/>' },
     { page: 'video', id: 'navVideo', href: 'video.html', title: 'Video Compressor', sub: 'Smaller MP4 / WebM',
       svg: '<rect x="2" y="5" width="14" height="14" rx="2"/><path d="m16 10 6-3v10l-6-3"/><path d="M6 12h6M9 9l-3 3 3 3"/>' },
+    { page: 'ocr', id: 'navOcr', href: 'ocr.html', title: 'Image to Text', sub: 'OCR · English + Bangla',
+      svg: '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 8h8M12 8v8"/>' },
   ];
 
   function sidebar(page) {

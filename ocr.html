@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image to Text · Versatilo Tool</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script>/* apply the saved theme before first paint (no flash) */try{const t=localStorage.getItem('versatilo-theme');if(t)document.documentElement.dataset.theme=t;}catch{}</script>
+<!-- Version + asset loader: js/version.js is the only place the version is set -->
+<script>document.write('<script src="js/version.js?t=' + Date.now() + '"><\/script>');</script>
+<script>loadAssets([
+  'css/base.css', 'css/layout.css', 'css/components.css', 'css/icons.css', 'css/convert.css', 'css/print.css',
+  'js/layout.js',
+]);</script>
+</head>
+<body>
+<div class="app">
+<script>Layout.sidebar('ocr');</script>
+
+  <!-- ===== Main area ===== -->
+  <div class="main">
+<script>Layout.topbar('ocr');</script>
+
+    <div class="wrap">
+      <header class="doc">
+        <h1>VERSATILO GROUP</h1>
+        <h2>IMAGE TO TEXT</h2>
+        <p>Pull the text out of screenshots, photos and scanned pages (OCR) – English and Bangla. Offline mode reads the image in your browser; Gemini mode is more accurate for handwriting and mixed Bangla / English.</p>
+      </header>
+
+      <div class="ic-grid">
+        <!-- ----- Controls ----- -->
+        <section class="card ic-ctrl">
+          <h3>1 · IMAGES</h3>
+          <label class="drop ic-drop" id="cvDrop" for="cvFile">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <b>Drop images here, click to choose, or paste (Ctrl+V)</b>
+            <small>PNG, JPG, WebP, BMP, GIF – screenshots work best.</small>
+          </label>
+          <input type="file" id="cvFile" accept="image/*" multiple hidden>
+
+          <h3 class="ic-h">2 · SETTINGS</h3>
+          <div class="ic-row">
+            <span class="ic-lbl">Engine</span>
+            <div class="seg" id="ocEngine" role="group" aria-label="OCR engine">
+              <button type="button" data-v="offline" aria-pressed="true">Offline</button><button type="button" data-v="gemini" aria-pressed="false">Gemini AI</button>
+            </div>
+          </div>
+          <div class="ic-row" data-eng="offline">
+            <span class="ic-lbl">Language</span>
+            <div class="seg" id="ocLang" role="group" aria-label="Language">
+              <button type="button" data-v="eng" aria-pressed="false">English</button><button type="button" data-v="ben" aria-pressed="false">Bangla</button><button type="button" data-v="eng+ben" aria-pressed="true">Both</button>
+            </div>
+          </div>
+          <div class="ic-row">
+            <span class="ic-lbl">Lines</span>
+            <div class="seg" id="ocLines" role="group" aria-label="Line breaks">
+              <button type="button" data-v="keep" aria-pressed="true">Keep as in image</button><button type="button" data-v="join" aria-pressed="false">Join paragraphs</button>
+            </div>
+          </div>
+          <div class="hint" id="cvNote"></div>
+        </section>
+
+        <!-- ----- Files + text ----- -->
+        <section class="card ic-prev">
+          <div class="cv-head"><h3>TEXT</h3><button type="button" id="cvClear" hidden>Clear all</button></div>
+          <ul class="cv-list oc-list" id="cvList"></ul>
+          <div class="cv-empty" id="cvEmpty">No images yet.</div>
+        </section>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite" data-idle="Add images to start.">Add images to start.</span>
+      <button type="button" id="ocCopyAll" hidden>Copy all</button>
+      <button type="button" id="ocSaveAll" hidden>Download .txt</button>
+      <button type="button" class="primary" id="ocGo" disabled>Extract text</button>
+    </div>
+  </div>
+</div>
+
+<script>Layout.dialogs();</script>
+
+<!-- Scripts: classic scripts share one global scope, so the order matters -->
+<script>
+loadAssets([
+  'js/common.js', 'js/docx-builder.js', 'js/gemini.js', 'js/github.js', 'js/ui.js',
+  'js/img-ocr.js', 'js/shell.js',
+]);
+</script>
+</body>
+</html>
