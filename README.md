@@ -36,11 +36,7 @@ css/
   report.css          Daily Report page
   editor.css          Edit Document page
   icons.css           Icon Generator page
-<<<<<<< HEAD
-  convert.css         Image Converter, Resizer, Compressor + Video Compressor pages (uses icons.css layout)
-=======
-  convert.css         Image Converter, Resizer, Video Compressor + Image to Text pages (uses icons.css layout)
->>>>>>> 1507402 (feat: add Image to Text (OCR) functionality with UI and backend support)
+  convert.css         Image Converter, Resizer, Compressor, Video Compressor + Image to Text pages (uses icons.css layout)
   print.css           print styles
 js/                   (classic scripts – load order matters)
   version.js          APP_VERSION + asset loader (never cached)

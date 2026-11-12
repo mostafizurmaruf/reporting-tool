@@ -4,11 +4,7 @@
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-<<<<<<< HEAD
-  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', compress: 'Image Compressor', video: 'Video Compressor', policy: 'Privacy Policy', service: 'Terms of Service' };
-=======
-  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', video: 'Video Compressor', ocr: 'Image to Text', policy: 'Privacy Policy', service: 'Terms of Service' };
->>>>>>> 1507402 (feat: add Image to Text (OCR) functionality with UI and backend support)
+  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', compress: 'Image Compressor', video: 'Video Compressor', ocr: 'Image to Text', policy: 'Privacy Policy', service: 'Terms of Service' };
   const w = html => document.write(html);
 
   /* Workspace tools – the sidebar links are built from this list */
