@@ -12,21 +12,24 @@
 .cv-head button{padding:5px 10px;font-size:12.5px}
 .cv-head button[hidden]{display:none}
 
-.cv-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 260px);overflow:auto}
-.cv-list li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px}
-.cv-list img{width:52px;height:52px;object-fit:contain;border-radius:6px;background:repeating-conic-gradient(color-mix(in srgb,var(--line) 70%,transparent) 0 25%,transparent 0 50%) 0 0/12px 12px}
-.cv-info{min-width:0}
+/* File cards: big preview on top, name + details + buttons underneath */
+.cv-list{list-style:none;margin:12px 0 0;padding:2px;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;align-items:stretch;max-height:calc(100vh - 260px);overflow:auto}
+.cv-list li{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.cv-list li > img{display:block;width:100%;height:170px;object-fit:contain;border-bottom:1px solid var(--line);background:repeating-conic-gradient(color-mix(in srgb,var(--line) 70%,transparent) 0 25%,transparent 0 50%) 0 0/14px 14px}
+.cv-info{min-width:0;padding:10px 12px 0}
 .cv-info b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13.5px}
 .cv-info small{display:block;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .cv-info small .up{color:var(--danger,#dc2626)}
 .cv-info small .down{color:var(--ok,#16a34a)}
 .cv-info small.err{color:var(--danger,#dc2626)}
-.cv-act{display:flex;gap:6px}
-.cv-act button{padding:5px 9px;font-size:12.5px}
-.cv-act .x{padding:5px 8px;line-height:1}
+.cv-info small + small{margin-top:3px}
+.cv-act{display:flex;gap:6px;padding:10px 12px 12px;margin-top:auto}
+.cv-act button{flex:1;padding:6px 9px;font-size:12.5px}
+/* remove button floats on the preview's corner */
+.cv-act .x{position:absolute;top:8px;right:8px;flex:none;width:28px;height:28px;padding:0;border-radius:99px;line-height:1;font-size:16px;background:color-mix(in srgb,var(--card) 88%,transparent);box-shadow:0 1px 4px rgba(0,0,0,.25)}
 .cv-empty{padding:28px 8px;text-align:center;color:var(--muted);font-size:13px}
 .cv-empty[hidden]{display:none}
-@media (max-width:520px){.cv-list li{grid-template-columns:44px minmax(0,1fr)}.cv-list img{width:44px;height:44px}.cv-act{grid-column:1/-1;justify-content:flex-end}}
+@media (max-width:520px){.cv-list{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.cv-list li > img{height:140px}}
 
 /* Image Resizer extras */
 .rz-sel{flex:1;min-width:200px;max-width:100%}
@@ -44,8 +47,8 @@
 .ic-check > small.cv-note{flex-basis:100%;margin-left:24px;font-weight:400}
 
 /* Video Compressor */
-.vc-list li{grid-template-columns:84px minmax(0,1fr) auto}
-.vc-list video{width:84px;height:52px;object-fit:cover;border-radius:6px;background:#000;pointer-events:none}
+.vc-list{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.vc-list video{display:block;width:100%;aspect-ratio:16/9;height:auto;object-fit:contain;background:#000;pointer-events:none}
 .vc-bar{height:6px;margin-top:6px;border-radius:99px;background:var(--line);overflow:hidden}
 .vc-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
 .cv-info small.vc-pct{margin-top:2px}
@@ -54,10 +57,11 @@
 .vc-chips button[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
 .vc-warn{color:var(--danger)}
 .vc-warn[hidden],[data-by][hidden]{display:none}
-@media (max-width:520px){.vc-list li{grid-template-columns:64px minmax(0,1fr)}.vc-list video{width:64px;height:44px}.vc-chips{margin-left:0}}
+@media (max-width:520px){.vc-list{grid-template-columns:1fr}.vc-chips{margin-left:0}}
 
 /* Image to Text */
-.oc-list li{align-items:start}
-.oc-list li > img,.oc-list .cv-act{align-self:center}
-.oc-text{grid-column:1/-1;min-height:110px;font-size:13.5px;line-height:1.55;white-space:pre-wrap}
+.oc-list{grid-template-columns:1fr}
+.oc-list li > img{height:240px}
+.oc-list .cv-act{margin-top:0}
+.oc-text{width:auto;margin:0 12px 12px;min-height:130px;font-size:13.5px;line-height:1.55;white-space:pre-wrap}
 .oc-text[hidden],[data-eng][hidden]{display:none}
