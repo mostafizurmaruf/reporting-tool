@@ -5,7 +5,7 @@
    The sidebar shows the same number.
    (Each page loads this tiny file with a fresh ?t=… so it is never cached.)
    ===================================================================== */
-window.APP_VERSION = '1.16.3';
+window.APP_VERSION = '1.17.0';
 
 // Writes <link>/<script> tags in place (keeps order, blocks like normal tags)
 window.loadAssets = files => files.forEach(f => document.write(f.endsWith('.css')

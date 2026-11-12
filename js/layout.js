@@ -4,7 +4,7 @@
    <script>Layout.sidebar('report')</script> etc., so the markup lives in one file.
    ===================================================================== */
 const Layout = (() => {
-  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', compress: 'Image Compressor', video: 'Video Compressor', ocr: 'Image to Text', policy: 'Privacy Policy', service: 'Terms of Service' };
+  const PAGES = { report: 'Daily Report', history: 'History', editor: 'Edit Document', icons: 'Icon Generator', convert: 'Image Converter', resize: 'Image Resizer', compress: 'Image Compressor', video: 'Video Compressor', ocr: 'Image to Text', pdf: 'PDF Converter', policy: 'Privacy Policy', service: 'Terms of Service' };
   const w = html => document.write(html);
 
   /* Workspace tools – the sidebar links are built from this list */
@@ -27,6 +27,8 @@ const Layout = (() => {
       svg: '<rect x="2" y="5" width="14" height="14" rx="2"/><path d="m16 10 6-3v10l-6-3"/><path d="M6 12h6M9 9l-3 3 3 3"/>' },
     { page: 'ocr', id: 'navOcr', href: 'ocr.html', title: 'Image to Text', sub: 'OCR · English + Bangla',
       svg: '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 8h8M12 8v8"/>' },
+    { page: 'pdf', id: 'navPdf', href: 'pdf.html', title: 'PDF Converter', sub: 'PDF → Word · Text · Images',
+      svg: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>' },
   ];
 
   function sidebar(page) {

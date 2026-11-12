@@ -65,3 +65,10 @@
 .oc-list .cv-act{margin-top:0}
 .oc-text{width:auto;margin:0 12px 12px;min-height:130px;font-size:13.5px;line-height:1.55;white-space:pre-wrap}
 .oc-text[hidden],[data-eng][hidden]{display:none}
+
+/* PDF Converter */
+.pc-seg{flex-wrap:wrap;max-width:100%}
+.pc-pages{flex:1;min-width:180px;max-width:320px}
+.pc-list li > img{object-fit:contain;background:var(--line)}
+.pc-ph{display:grid;place-items:center;height:170px;border-bottom:1px solid var(--line);font-weight:700;letter-spacing:.08em;color:var(--muted);background:color-mix(in srgb,var(--line) 45%,transparent)}
+[data-kind][hidden],[data-ocr][hidden]{display:none}
