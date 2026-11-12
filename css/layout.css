@@ -12,7 +12,8 @@ a.brand{text-decoration:none;color:inherit}
 .brand small{display:block;color:var(--side-muted);font-size:11.5px}
 .brand .ver{display:inline-block;margin-left:4px;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.03em;vertical-align:2px;color:var(--side-muted);background:rgba(255,255,255,.08)}
 
-.side-nav{flex:1;overflow-y:auto;padding:14px 12px}
+.side-nav{flex:1;overflow-y:auto;padding:14px 12px;scrollbar-width:none;-ms-overflow-style:none}
+.side-nav::-webkit-scrollbar{display:none}
 .nav-label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--side-muted);padding:12px 10px 8px}
 .nav-item{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:10px;background:transparent;color:var(--side-ink);padding:10px 12px;margin-bottom:4px}
 a.nav-item{text-decoration:none;box-sizing:border-box}
