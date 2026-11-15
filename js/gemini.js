@@ -25,7 +25,8 @@ ${JSON.stringify(tasks.map(t => t.remarks ? { task: t.task, remarks: t.remarks }
   return out.map(v => String(v ?? '').trim());
 }
 
-// Shared Gemini call: returns the parsed JSON array that matches `schema`
+// Shared Gemini call: returns the parsed JSON array that matches `schema`.
+// `images`: base64 JPEG strings, or { mime, data } for other media (e.g. audio/wav)
 async function callGemini(prompt, schema, key, images = []) {
   key = key || $('aiKey').value.trim() || aiKeyMem;
   if (!key) throw new Error('Add your Gemini API key in ⚙ Settings first.');
@@ -33,7 +34,7 @@ async function callGemini(prompt, schema, key, images = []) {
   // level 0: thinking off + JSON schema · 1: default thinking + schema · 2: plain JSON, no schema (schema is in the prompt anyway)
   const makeBody = level => JSON.stringify({
     contents: [{ role: 'user', parts: [{ text: level < 2 ? prompt : prompt + '\nReply with JSON only, matching this schema: ' + JSON.stringify(schema) },
-                                       ...images.map(data => ({ inline_data: { mime_type: 'image/jpeg', data } }))] }],
+                                       ...images.map(d => ({ inline_data: typeof d === 'string' ? { mime_type: 'image/jpeg', data: d } : { mime_type: d.mime, data: d.data } }))] }],
     generationConfig: { temperature: 0.4, responseMimeType: 'application/json',
                         ...(level < 2 ? { responseSchema: schema } : {}),
                         ...(level === 0 ? { thinkingConfig: { thinkingBudget: 0 } } : {}) },
