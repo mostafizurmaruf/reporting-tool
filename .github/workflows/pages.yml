@@ -1,0 +1,45 @@
+# Deploys the site to GitHub Pages on every push to main.
+# The Google OAuth client secret is NOT in the repo – it comes from the repository secret
+# GOOGLE_CLIENT_SECRET (Settings → Secrets and variables → Actions) and is written into
+# js/google-auth.js only in the deployed copy.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Insert Google client secret
+        env:
+          SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        run: |
+          if [ -z "$SECRET" ]; then echo "::warning::GOOGLE_CLIENT_SECRET is not set – Google sign-in will ask again every hour."; exit 0; fi
+          python3 -c "import os,pathlib; p=pathlib.Path('js/google-auth.js'); t=p.read_text(); assert '__GOOGLE_CLIENT_SECRET__' in t; p.write_text(t.replace('__GOOGLE_CLIENT_SECRET__', os.environ['SECRET']))"
+
+      - name: Remove repo-only files from the site
+        run: rm -rf .git .github
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
