@@ -42,7 +42,7 @@ function loadDay(day) {
 
 function addRow(t = {}) {
   const tr = document.createElement('tr');
-  tr.innerHTML = `<td class="pick"><input type="checkbox" class="pick" aria-label="Select row"></td><td class="sl"></td>
+  tr.innerHTML = `<td class="pick"><input type="checkbox" class="pick" aria-label="Select row"></td><td class="sl"><span class="n"></span><span class="mv"><button type="button" class="icon up" title="Move up (Alt+↑)" aria-label="Move row up">▲</button><button type="button" class="icon dn" title="Move down (Alt+↓)" aria-label="Move row down">▼</button></span></td>
     <td><textarea data-f="task" rows="2"></textarea></td>
     <td><textarea data-f="source" rows="2"></textarea></td>
     <td><textarea data-f="done" rows="2"></textarea></td>
@@ -55,9 +55,37 @@ function addRow(t = {}) {
   if (t.remarks == null) tr.querySelector('[data-f=remarks]').value = 'Completed';
   tr.querySelector('.gen').onclick = () => aiGenerate([tr], true);
   tr.querySelector('.del').onclick = () => deleteRows([tr]);
+  tr.querySelector('.up').onclick = () => moveRow(tr, -1);
+  tr.querySelector('.dn').onclick = () => moveRow(tr, 1);
   tbody.appendChild(tr); renumber();
 }
-function renumber() { [...tbody.children].forEach((tr, i) => tr.querySelector('td.sl').textContent = i + 1); syncPick(); }
+function renumber() {
+  const trs = [...tbody.children];
+  trs.forEach((tr, i) => {
+    tr.querySelector('td.sl .n').textContent = i + 1;
+    tr.querySelector('.up').disabled = i === 0;
+    tr.querySelector('.dn').disabled = i === trs.length - 1;
+  });
+  syncPick();
+}
+
+/* ===== Reorder rows: ▲/▼ buttons, or Alt+↑ / Alt+↓ while typing in a row ===== */
+function moveRow(tr, dir) {
+  const sib = dir < 0 ? tr.previousElementSibling : tr.nextElementSibling;
+  if (!sib) return false;
+  tbody.insertBefore(tr, dir < 0 ? sib : sib.nextElementSibling);
+  hideUndo();   // saved Undo positions no longer match after a move
+  renumber(); onChange();
+  return true;
+}
+tbody.addEventListener('keydown', e => {
+  if (!e.altKey || e.ctrlKey || e.metaKey || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+  const tr = e.target.closest('tr');
+  if (!tr) return;
+  e.preventDefault();
+  const el = e.target;
+  if (moveRow(tr, e.key === 'ArrowUp' ? -1 : 1)) el.focus();
+});
 
 /* ===== Row selection: single checkbox + select all → delete selected ===== */
 function picks() { return [...tbody.querySelectorAll('input.pick')]; }
