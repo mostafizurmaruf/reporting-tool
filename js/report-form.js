@@ -42,7 +42,7 @@ function loadDay(day) {
 
 function addRow(t = {}) {
   const tr = document.createElement('tr');
-  tr.innerHTML = `<td class="pick"><input type="checkbox" class="pick" aria-label="Select row"></td><td class="sl"><span class="n"></span><span class="mv"><button type="button" class="icon up" title="Move up (Alt+↑)" aria-label="Move row up">▲</button><button type="button" class="icon dn" title="Move down (Alt+↓)" aria-label="Move row down">▼</button></span></td>
+  tr.innerHTML = `<td class="pick"><input type="checkbox" class="pick" aria-label="Select row"></td><td class="sl"><span class="grip" title="Drag to reorder (or Alt+↑ / Alt+↓ while typing)" aria-hidden="true">⠿</span><span class="n"></span></td>
     <td><textarea data-f="task" rows="2"></textarea></td>
     <td><textarea data-f="source" rows="2"></textarea></td>
     <td><textarea data-f="done" rows="2"></textarea></td>
@@ -55,21 +55,18 @@ function addRow(t = {}) {
   if (t.remarks == null) tr.querySelector('[data-f=remarks]').value = 'Completed';
   tr.querySelector('.gen').onclick = () => aiGenerate([tr], true);
   tr.querySelector('.del').onclick = () => deleteRows([tr]);
-  tr.querySelector('.up').onclick = () => moveRow(tr, -1);
-  tr.querySelector('.dn').onclick = () => moveRow(tr, 1);
+  tr.querySelector('.grip').addEventListener('pointerdown', e => dragRow(tr, e));
   tbody.appendChild(tr); renumber();
 }
 function renumber() {
   const trs = [...tbody.children];
   trs.forEach((tr, i) => {
     tr.querySelector('td.sl .n').textContent = i + 1;
-    tr.querySelector('.up').disabled = i === 0;
-    tr.querySelector('.dn').disabled = i === trs.length - 1;
   });
   syncPick();
 }
 
-/* ===== Reorder rows: ▲/▼ buttons, or Alt+↑ / Alt+↓ while typing in a row ===== */
+/* ===== Reorder rows: drag the ⠿ grip (mouse or touch), or Alt+↑ / Alt+↓ while typing in a row ===== */
 function moveRow(tr, dir) {
   const sib = dir < 0 ? tr.previousElementSibling : tr.nextElementSibling;
   if (!sib) return false;
@@ -77,6 +74,39 @@ function moveRow(tr, dir) {
   hideUndo();   // saved Undo positions no longer match after a move
   renumber(); onChange();
   return true;
+}
+function dragRow(tr, e) {
+  if (e.button > 0) return;
+  e.preventDefault();
+  const grip = e.currentTarget, start = [...tbody.children].indexOf(tr);
+  grip.setPointerCapture(e.pointerId);
+  tr.classList.add('dragging'); document.body.classList.add('row-drag');
+  let y = e.clientY, scrollT;
+  const place = () => {
+    const prev = tr.previousElementSibling, next = tr.nextElementSibling;
+    const mid = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
+    if (prev && y < mid(prev)) { tbody.insertBefore(tr, prev); renumber(); place(); }
+    else if (next && y > mid(next)) { tbody.insertBefore(tr, next.nextElementSibling); renumber(); place(); }
+  };
+  // Scroll the page while the pointer is held near the top/bottom edge
+  const edge = () => {
+    const d = y < 60 ? -12 : y > innerHeight - 60 ? 12 : 0;
+    if (d) { scrollBy(0, d); place(); }
+    scrollT = requestAnimationFrame(edge);
+  };
+  scrollT = requestAnimationFrame(edge);
+  const move = ev => { y = ev.clientY; place(); };
+  const end = () => {
+    cancelAnimationFrame(scrollT);
+    grip.removeEventListener('pointermove', move);
+    grip.removeEventListener('pointerup', end);
+    grip.removeEventListener('pointercancel', end);
+    tr.classList.remove('dragging'); document.body.classList.remove('row-drag');
+    if ([...tbody.children].indexOf(tr) !== start) { hideUndo(); renumber(); onChange(); }
+  };
+  grip.addEventListener('pointermove', move);
+  grip.addEventListener('pointerup', end);
+  grip.addEventListener('pointercancel', end);
 }
 tbody.addEventListener('keydown', e => {
   if (!e.altKey || e.ctrlKey || e.metaKey || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
