@@ -28,9 +28,18 @@ td.sl{width:36px;text-align:center;font-weight:600;padding-top:14px}
 td.sl .n{display:block}
 td.sl .grip{display:block;margin:-8px auto 4px;width:24px;line-height:22px;border-radius:6px;color:var(--muted);font-size:16px;font-weight:400;cursor:grab;touch-action:none;user-select:none}
 td.sl .grip:hover{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent)}
-tr.dragging td{background:color-mix(in srgb,var(--accent) 12%,transparent)}
-tr.dragging{box-shadow:0 4px 14px rgba(0,0,0,.18);position:relative;z-index:1}
+/* Drag to reorder: the held row follows the pointer, the others slide aside to open a gap */
+tbody.sorting tr{position:relative;transition:transform .18s ease}
+tbody.sorting tr.dragging{z-index:2;transition:none;box-shadow:0 10px 28px rgba(0,0,0,.22),0 0 0 2px var(--accent);border-radius:8px}
+tbody.sorting tr.dragging td{background:var(--card);border-bottom-color:transparent}
+tbody.sorting tr.dragging td.sl .grip{background:var(--accent);color:#fff}
+tbody.sorting tr.dragging td.sl .n{color:var(--accent)}
+tbody.sorting tr:not(.dragging) td{opacity:.75}
+tbody.sorting tr.dragging.dropping{transition:transform .2s ease,box-shadow .2s ease}
+tr.moved td{animation:rowMoved .7s ease}
+@keyframes rowMoved{from{background:color-mix(in srgb,var(--accent) 22%,transparent)}to{background:transparent}}
 body.row-drag,body.row-drag *{cursor:grabbing !important;user-select:none}
+@media (prefers-reduced-motion:reduce){tbody.sorting tr,tbody.sorting tr.dragging.dropping{transition:none}tr.moved td{animation:none}}
 td.pct{width:92px}
 td.act{width:44px;text-align:center}
 td.act .icon{display:block;width:100%;margin-bottom:4px}

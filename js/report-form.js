@@ -76,33 +76,76 @@ function moveRow(tr, dir) {
   return true;
 }
 function dragRow(tr, e) {
-  if (e.button > 0) return;
+  if (e.button > 0 || tbody.classList.contains('settling')) return;
   e.preventDefault();
-  const grip = e.currentTarget, start = [...tbody.children].indexOf(tr);
+  const grip = e.currentTarget;
   grip.setPointerCapture(e.pointerId);
-  tr.classList.add('dragging'); document.body.classList.add('row-drag');
-  let y = e.clientY, scrollT;
-  const place = () => {
-    const prev = tr.previousElementSibling, next = tr.nextElementSibling;
-    const mid = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
-    if (prev && y < mid(prev)) { tbody.insertBefore(tr, prev); renumber(); place(); }
-    else if (next && y > mid(next)) { tbody.insertBefore(tr, next.nextElementSibling); renumber(); place(); }
+  const rows = [...tbody.children], start = rows.indexOf(tr);
+  const sy0 = scrollY, y0 = e.clientY;
+  // Row positions in page coordinates, taken once so the math stays stable while things move
+  const box = rows.map(r => { const b = r.getBoundingClientRect(); return { top: b.top + sy0, h: b.height }; });
+  const h = box[start].h;
+  const minDy = box[0].top - box[start].top, maxDy = box.at(-1).top + box.at(-1).h - (box[start].top + h);
+  let y = y0, target = start, scrollT;
+  tr.classList.add('dragging'); tbody.classList.add('sorting'); document.body.classList.add('row-drag');
+
+  const nums = () => {   // show the serial numbers the rows will get if dropped now
+    const order = rows.filter(r => r !== tr); order.splice(target, 0, tr);
+    order.forEach((r, i) => r.querySelector('td.sl .n').textContent = i + 1);
+  };
+  const update = () => {
+    const dy = Math.min(maxDy, Math.max(minDy, y - y0 + scrollY - sy0));
+    tr.style.transform = `translateY(${dy}px)`;
+    const c = box[start].top + h / 2 + dy;   // centre of the dragged row
+    let t = start;
+    for (let i = start + 1; i < rows.length; i++) if (c > box[i].top + box[i].h / 2) t = i;
+    for (let i = start - 1; i >= 0; i--) if (c < box[i].top + box[i].h / 2) t = i;
+    if (t !== target) {
+      target = t;
+      rows.forEach((r, i) => {
+        if (r === tr) return;
+        const shift = i > start && i <= target ? -h : i < start && i >= target ? h : 0;
+        r.style.transform = shift ? `translateY(${shift}px)` : '';
+      });
+      nums();
+    }
   };
   // Scroll the page while the pointer is held near the top/bottom edge
   const edge = () => {
-    const d = y < 60 ? -12 : y > innerHeight - 60 ? 12 : 0;
-    if (d) { scrollBy(0, d); place(); }
+    const d = y < 70 ? -10 : y > innerHeight - 110 ? 10 : 0;   // bottom zone clears the sticky action bar
+    if (d) { scrollBy(0, d); update(); }
     scrollT = requestAnimationFrame(edge);
   };
   scrollT = requestAnimationFrame(edge);
-  const move = ev => { y = ev.clientY; place(); };
+  const move = ev => { y = ev.clientY; update(); };
   const end = () => {
     cancelAnimationFrame(scrollT);
     grip.removeEventListener('pointermove', move);
     grip.removeEventListener('pointerup', end);
     grip.removeEventListener('pointercancel', end);
-    tr.classList.remove('dragging'); document.body.classList.remove('row-drag');
-    if ([...tbody.children].indexOf(tr) !== start) { hideUndo(); renumber(); onChange(); }
+    document.body.classList.remove('row-drag');
+    // Glide the dragged row into its new slot, then move it in the DOM for real
+    let off = 0;
+    if (target > start) for (let i = start + 1; i <= target; i++) off += box[i].h;
+    else for (let i = target; i < start; i++) off -= box[i].h;
+    tbody.classList.add('settling');
+    tr.classList.add('dropping');
+    tr.style.transform = `translateY(${off}px)`;
+    let done = false;
+    const finish = () => {
+      if (done) return; done = true;
+      tbody.classList.remove('sorting', 'settling');
+      tr.classList.remove('dragging', 'dropping');
+      rows.forEach(r => r.style.transform = '');
+      if (target !== start) {
+        tbody.insertBefore(tr, rows.filter(r => r !== tr)[target] || null);
+        hideUndo();   // saved Undo positions no longer match after a move
+        renumber(); onChange();
+        tr.classList.add('moved'); setTimeout(() => tr.classList.remove('moved'), 700);
+      } else renumber();
+    };
+    tr.addEventListener('transitionend', finish, { once: true });
+    setTimeout(finish, 260);   // in case no transition runs (reduced motion, zero distance)
   };
   grip.addEventListener('pointermove', move);
   grip.addEventListener('pointerup', end);
