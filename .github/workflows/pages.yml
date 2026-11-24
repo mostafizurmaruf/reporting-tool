@@ -19,11 +19,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  # Build and deploy are separate jobs (GitHub's recommended layout): the deploy job only
+  # starts after the build job has finished, so the uploaded artifact is fully registered
+  # by then. Deploying in the same job right after the upload sometimes can't see it yet.
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      artifact: github-pages-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
 
@@ -44,7 +46,16 @@ jobs:
         with:
           path: .
           name: github-pages-${{ github.run_attempt }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
         with:
-          artifact_name: github-pages-${{ github.run_attempt }}
+          # From the build job, so "Re-run failed jobs" (deploy only) still finds it.
+          artifact_name: ${{ needs.build.outputs.artifact }}
