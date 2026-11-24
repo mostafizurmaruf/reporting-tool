@@ -79,13 +79,13 @@ function reportName(d, ext) {
   const safe = s => (s || '').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '_');
   return ['Daily_Task_Report', safe(d.empName), d.repDate].filter(Boolean).join('_') + '.' + ext;
 }
-// PDF: "Employee Nickname - Department Name - DD-MM-YYYY.pdf"
+// PDF: "Nickname-Department-DD-MM-YYYY.pdf"
 function pdfName(d) {
   const clean = s => (s || '').replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').trim();
   const nick = clean(d.nickname) || clean(d.empName).split(' ')[0];
   const [y, m, dd] = (d.repDate || '').split('-');
   const date = y ? `${dd}-${m}-${y}` : '';
-  return [nick, clean(d.dept), date].filter(Boolean).join(' - ') + '.pdf';
+  return [nick, clean(d.dept), date].filter(Boolean).join('-') + '.pdf';
 }
 $('docxBtn').onclick = () => {
   const tokP = Drive.begin();   // Google sign-in must start inside the click
